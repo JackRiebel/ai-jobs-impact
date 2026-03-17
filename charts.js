@@ -1,16 +1,36 @@
 // ── Helpers ─────────────────────────────────────────────────────────────
 
 function exposureColor(score, alpha = 1) {
+  // Richer 5-stop gradient: teal → green → amber → orange → red
   const t = Math.max(0, Math.min(10, score)) / 10;
-  let r, g, b;
-  if (t < 0.5) {
-    const s = t / 0.5;
-    r = Math.round(50 + s * 180); g = Math.round(160 - s * 10); b = Math.round(50 - s * 20);
-  } else {
-    const s = (t - 0.5) / 0.5;
-    r = Math.round(230 + s * 25); g = Math.round(150 - s * 110); b = Math.round(30 - s * 10);
-  }
+  const stops = [
+    [0, 45, 180, 120],    // 0: deep teal
+    [0.25, 52, 211, 153], // 2.5: emerald green
+    [0.5, 250, 204, 21],  // 5: golden amber
+    [0.75, 249, 115, 22], // 7.5: vivid orange
+    [1, 239, 68, 68],     // 10: red
+  ];
+  let i = 0;
+  for (; i < stops.length - 2; i++) { if (t <= stops[i + 1][0]) break; }
+  const [t0, r0, g0, b0] = stops[i];
+  const [t1, r1, g1, b1] = stops[i + 1];
+  const s = (t - t0) / (t1 - t0);
+  const r = Math.round(r0 + s * (r1 - r0));
+  const g = Math.round(g0 + s * (g1 - g0));
+  const b = Math.round(b0 + s * (b1 - b0));
   return `rgba(${r},${g},${b},${alpha})`;
+}
+function exposureRGB(score) {
+  const t = Math.max(0, Math.min(10, score)) / 10;
+  const stops = [
+    [0, 45, 180, 120], [0.25, 52, 211, 153], [0.5, 250, 204, 21],
+    [0.75, 249, 115, 22], [1, 239, 68, 68],
+  ];
+  let i = 0;
+  for (; i < stops.length - 2; i++) { if (t <= stops[i + 1][0]) break; }
+  const [t0, r0, g0, b0] = stops[i], [t1, r1, g1, b1] = stops[i + 1];
+  const s = (t - t0) / (t1 - t0);
+  return [Math.round(r0+s*(r1-r0)), Math.round(g0+s*(g1-g0)), Math.round(b0+s*(b1-b0))];
 }
 
 const EDU_COLORS = {
@@ -118,6 +138,8 @@ function buildTreemap(DATA) {
     return worst;
   }
 
+  let catRectsList = []; // store category-level rects for labels
+
   function layout() {
     const w = wrapper.clientWidth;
     const h = wrapper.clientHeight;
@@ -125,9 +147,8 @@ function buildTreemap(DATA) {
     canvas.height = h * dpr;
     canvas.style.width = w + "px";
     canvas.style.height = h + "px";
-    const GAP = 1.5, M = 2;
+    const CATGAP = 3, INNERGAP = 1;
 
-    // Group by category
     const bycat = {};
     DATA.forEach(d => {
       if (!bycat[d.category]) bycat[d.category] = [];
@@ -135,49 +156,119 @@ function buildTreemap(DATA) {
     });
     const cats = Object.keys(bycat).map(c => ({
       cat: c,
+      name: CAT_NAMES[c] || c,
       items: bycat[c].sort((a, b) => (b.jobs || 0) - (a.jobs || 0)),
       value: bycat[c].reduce((s, d) => s + (d.jobs || 1), 0),
     })).sort((a, b) => b.value - a.value);
 
-    const catRects = squarify(cats, M, M, w - M * 2, h - M * 2);
+    catRectsList = squarify(cats, CATGAP, CATGAP, w - CATGAP * 2, h - CATGAP * 2);
     rects = [];
-    for (const cr of catRects) {
+    for (const cr of catRectsList) {
+      const pad = CATGAP;
       const items = cr.items.map(d => ({ ...d, value: d.jobs || 1 }));
-      const inner = squarify(items, cr.rx + GAP, cr.ry + GAP, cr.rw - GAP * 2, cr.rh - GAP * 2);
+      const inner = squarify(items, cr.rx + pad, cr.ry + pad, cr.rw - pad * 2, cr.rh - pad * 2);
+      for (const ir of inner) ir._cat = cr.cat;
       rects.push(...inner);
     }
   }
 
+  function roundRect(ctx, x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r);
+    ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+    ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r);
+    ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r);
+    ctx.closePath();
+  }
+
   function draw() {
+    const cw = canvas.width / dpr, ch = canvas.height / dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = "#0a0a0f";
-    ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
-    const G = 0.75;
+
+    // Dark background
+    ctx.fillStyle = "#08080c";
+    ctx.fillRect(0, 0, cw, ch);
+
+    // Draw category group backgrounds (subtle)
+    for (const cr of catRectsList) {
+      roundRect(ctx, cr.rx, cr.ry, cr.rw, cr.rh, 4);
+      ctx.fillStyle = "rgba(255,255,255,0.02)";
+      ctx.fill();
+    }
+
+    // Draw occupation tiles
+    const G = 0.6;
     for (const r of rects) {
       const isH = r === hovered;
       const rx = r.rx + G, ry = r.ry + G, rw = r.rw - G * 2, rh = r.rh - G * 2;
       if (rw <= 0 || rh <= 0) continue;
-      ctx.fillStyle = exposureColor(r.exposure != null ? r.exposure : 5, isH ? 0.85 : 0.55);
-      ctx.fillRect(rx, ry, rw, rh);
-      if (isH) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(rx, ry, rw, rh); }
-      // Labels
-      if (rw > 48 && rh > 16) {
+
+      const exp = r.exposure != null ? r.exposure : 5;
+      const [cr, cg, cb] = exposureRGB(exp);
+      const baseAlpha = isH ? 0.82 : 0.48;
+
+      // Fill with rounded corners
+      roundRect(ctx, rx, ry, rw, rh, 3);
+      ctx.fillStyle = `rgba(${cr},${cg},${cb},${baseAlpha})`;
+      ctx.fill();
+
+      // Subtle inner glow on hover
+      if (isH) {
+        ctx.strokeStyle = "rgba(255,255,255,0.8)";
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, rx, ry, rw, rh, 3);
+        ctx.stroke();
+      }
+
+      // Text labels — show on more tiles by lowering thresholds
+      if (rw > 36 && rh > 14) {
         ctx.save();
         ctx.beginPath(); ctx.rect(rx + 3, ry + 2, rw - 6, rh - 4); ctx.clip();
-        const fs = Math.min(12, Math.max(8, Math.min(rw / 10, rh / 3)));
-        ctx.font = `500 ${fs}px -apple-system, system-ui, sans-serif`;
-        ctx.fillStyle = isH ? "#fff" : "rgba(255,255,255,0.85)";
+
+        const fs = Math.min(13, Math.max(7.5, Math.min(rw / 8, rh / 2.8)));
+        ctx.font = `600 ${fs}px -apple-system, system-ui, sans-serif`;
+        ctx.fillStyle = isH ? "#fff" : "rgba(255,255,255,0.88)";
         ctx.textBaseline = "top";
-        ctx.fillText(r.title, rx + 4, ry + 3);
-        if (rh > 30 && rw > 55) {
-          const info = (r.exposure != null ? r.exposure + "/10" : "") + (r.jobs ? " · " + fmt(r.jobs) : "");
-          ctx.font = `400 ${Math.max(7, fs - 2)}px -apple-system, system-ui, sans-serif`;
-          ctx.fillStyle = "rgba(255,255,255,0.5)";
-          ctx.fillText(info, rx + 4, ry + 3 + fs + 2);
+
+        // Shadow for readability
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 2;
+        ctx.fillText(r.title, rx + 5, ry + 4);
+        ctx.shadowBlur = 0;
+
+        // Sub-label: exposure + jobs
+        if (rh > 26 && rw > 44) {
+          const info = (r.exposure != null ? r.exposure + "/10" : "") +
+                       (r.jobs ? " · " + fmt(r.jobs) + " jobs" : "");
+          ctx.font = `400 ${Math.max(7, fs - 2.5)}px -apple-system, system-ui, sans-serif`;
+          ctx.fillStyle = isH ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.45)";
+          ctx.fillText(info, rx + 5, ry + 5 + fs + 1);
+        }
+        // Third line: pay (for larger tiles)
+        if (rh > 44 && rw > 60 && r.pay) {
+          ctx.font = `400 ${Math.max(7, fs - 3)}px -apple-system, system-ui, sans-serif`;
+          ctx.fillStyle = "rgba(255,255,255,0.35)";
+          ctx.fillText(fmtPay(r.pay) + " median", rx + 5, ry + 6 + fs * 2);
         }
         ctx.restore();
       }
     }
+
+    // Draw category labels (overlaid in corners of each group)
+    ctx.save();
+    for (const cr of catRectsList) {
+      if (cr.rw < 60 || cr.rh < 30) continue;
+      const name = cr.name || CAT_NAMES[cr.cat] || cr.cat;
+      const fs = Math.min(11, Math.max(8, cr.rw / 18));
+      ctx.font = `700 ${fs}px -apple-system, system-ui, sans-serif`;
+      ctx.fillStyle = "rgba(255,255,255,0.15)";
+      ctx.textBaseline = "bottom";
+      ctx.textAlign = "right";
+      ctx.fillText(name.toUpperCase(), cr.rx + cr.rw - 5, cr.ry + cr.rh - 4);
+    }
+    ctx.restore();
   }
 
   function hitTest(mx, my) {
