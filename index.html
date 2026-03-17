@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Impact on the Workforce — Interactive Analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-content">
+    <h1>How AI Will Reshape the Workforce</h1>
+    <p class="subtitle">An interactive analysis of 342 occupations covering 143M+ US jobs — examining how AI proficiency, education, and adaptability determine who thrives and who gets left behind.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value">143M</span>
+        <span class="hero-stat-label">US Jobs Analyzed</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">342</span>
+        <span class="hero-stat-label">Occupations Scored</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">4.7</span>
+        <span class="hero-stat-label">Avg Exposure (0–10)</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">25.2M</span>
+        <span class="hero-stat-label">High-Exposure Jobs (8+)</span>
+      </div>
+    </div>
+    <div class="hero-sources">
+      Data: <a href="https://www.bls.gov/ooh/" target="_blank">Bureau of Labor Statistics OOH</a> &middot;
+      <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic Economic Index</a> &middot;
+      <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a>
+    </div>
+  </div>
+</header>
+
+<!-- Navigation -->
+<nav class="sticky-nav" id="nav">
+  <div class="nav-inner">
+    <a href="#master" class="nav-link active">Master View</a>
+    <a href="#overview" class="nav-link">Exposure Landscape</a>
+    <a href="#ai-skills" class="nav-link">AI Skill Advantage</a>
+    <a href="#education" class="nav-link">Degree vs No Degree</a>
+    <a href="#timeline" class="nav-link">2024–2034 Outlook</a>
+    <a href="#methodology" class="nav-link">Methodology</a>
+  </div>
+</nav>
+
+<!-- MASTER CHART: The Full Picture -->
+<section class="section" id="master">
+  <div class="container">
+    <h2>The Full Picture: One Chart to Understand It All</h2>
+    <p class="section-desc">Each bubble is one of 25 job sectors. X-axis = AI exposure, Y-axis = BLS projected growth. Size = how many people work in that sector. Color = exposure level. The pattern is clear: higher exposure correlates with slower growth — but Computer & IT (top-right) defies the trend because AI creates demand there too. Hover any bubble for details.</p>
+    <div class="chart-card wide" style="padding:24px;">
+      <div class="master-controls">
+        <span class="master-hint">Hover over any bubble for full sector details | Size = employment count</span>
+      </div>
+      <div style="position:relative;height:520px;"><canvas id="masterChart"></canvas></div>
+      <div class="master-legend" id="masterLegend"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 1: AI Exposure Landscape -->
+<section class="section alt" id="overview">
+  <div class="container">
+    <h2>The AI Exposure Landscape</h2>
+    <p class="section-desc">Every occupation scored 0–10 based on how much AI can automate or augment its core tasks. Scores from BLS occupation data analyzed by Gemini Flash, weighted by actual employment numbers. 30% of workers have zero meaningful AI exposure.</p>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>Distribution of Workers by AI Exposure Score</h3>
+        <p class="chart-desc">How many US jobs fall at each exposure level? Weighted by employment — larger occupations count more.</p>
+        <canvas id="exposureHistogram"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Exposure Tier Breakdown</h3>
+        <p class="chart-desc">Grouping 143M jobs into five risk tiers</p>
+        <canvas id="tierDoughnut"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>AI Exposure by Pay Band</h3>
+        <p class="chart-desc">Higher-paid workers face more AI exposure — the opposite of what many expect. Anthropic confirms exposed workers earn 47% more.</p>
+        <canvas id="payExposure"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>Most Exposed Occupations</h3>
+        <p class="chart-desc">Jobs scoring 9–10: almost entirely digital work</p>
+        <div class="job-list" id="topJobsList"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Least Exposed Occupations</h3>
+        <p class="chart-desc">Jobs scoring 1: physical, hands-on, in-person</p>
+        <div class="job-list" id="bottomJobsList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: AI Skill Advantage -->
+<section class="section" id="ai-skills">
+  <div class="container">
+    <h2>The AI Skill Advantage</h2>
+    <p class="section-desc">The critical dividing line isn't "will AI affect your job?" — it's "do you know how to use AI?" Workers who leverage AI become more productive and valuable. Those who don't risk being outpaced. Anthropic's data shows the gap between theoretical AI capability (94%) and actual usage (33%) in tech roles — the workers closing that gap are the ones winning.</p>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>Projected Career Trajectory: AI-Skilled vs Not (2024–2034)</h3>
+        <p class="chart-desc">Modeled on Anthropic's finding that 10pp coverage increase = 0.6pp growth decline. AI-skilled workers offset displacement with productivity gains; unskilled workers absorb the full impact. Based on BLS growth projections adjusted for AI adoption curves.</p>
+        <canvas id="aiSkillTimeline"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>The Proficiency Gap Widens with Exposure</h3>
+        <p class="chart-desc">In low-exposure jobs (construction, food service), AI skill barely matters. In high-exposure jobs (programming, finance, writing), it's the difference between thriving and displacement.</p>
+        <canvas id="proficiencyGap"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Why AI Proficiency Matters</h3>
+        <div class="insight-cards" id="insightCards"></div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>The Coverage Gap: What AI Can Do vs What It Does</h3>
+        <p class="chart-desc">Anthropic found a massive gap between theoretical AI capability and actual real-world usage. Workers who close this gap for their employer capture enormous value.</p>
+        <canvas id="coverageGap"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Education Impact -->
+<section class="section alt" id="education">
+  <div class="container">
+    <h2>Degree vs No Degree in the Age of AI</h2>
+    <p class="section-desc">Counterintuitively, AI targets educated knowledge workers more than manual laborers. Bachelor's degree holders face an average exposure of 6.74 vs 3.09 for those with no credential. Anthropic found graduate degree holders are nearly 4x more likely to be in highly exposed roles (17.4% vs 4.5%). But education + AI skills is the most powerful combination.</p>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>AI Exposure by Education Level</h3>
+        <p class="chart-desc">Real data from 342 occupations. Each bar shows the job-weighted average exposure for workers at that education level. More education = more AI exposure, because educated workers do more digital knowledge work.</p>
+        <canvas id="eduExposure"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>The Education Paradox: More Exposed, But Higher Paid</h3>
+        <p class="chart-desc">Exposed workers aren't low-wage — they earn far more. The question is whether AI augments their value or replaces it.</p>
+        <canvas id="eduPayVsExposure"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Projected Impact: Degree + AI Skill Matrix</h3>
+        <p class="chart-desc">Four scenarios crossing education with AI proficiency</p>
+        <canvas id="eduAiSkill"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>The Education-AI Matrix: Four Futures</h3>
+        <p class="chart-desc">Your outcome depends on two factors: your credentials and your AI proficiency</p>
+        <div class="matrix-grid" id="eduMatrix"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: Timeline & Outlook -->
+<section class="section" id="timeline">
+  <div class="container">
+    <h2>The Road Ahead: 2024–2034</h2>
+    <p class="section-desc">BLS projects employment growth through 2034 for every occupation. When we overlay AI exposure data, a clear pattern emerges: high-exposure occupations average just 1.34% projected growth vs 5.02% for low-exposure ones. But individual outcomes within each tier will diverge dramatically based on AI adoption.</p>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>BLS Employment Growth vs AI Exposure (Real Data)</h3>
+        <p class="chart-desc">Actual BLS 2024–2034 projections grouped by AI exposure tier. Higher exposure = lower projected growth. This is the real data, not a model.</p>
+        <canvas id="outlookByExposure"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>Four Workforce Scenarios: 2024–2034</h3>
+        <p class="chart-desc">Projected employment index for four worker profiles, based on BLS growth rates adjusted by Anthropic's -0.6pp per 10pp coverage finding and modeled AI adoption curves</p>
+        <canvas id="growthProjection"></canvas>
+      </div>
+    </div>
+    <div class="key-findings">
+      <h3>Key Research Findings</h3>
+      <div class="findings-grid" id="findingsGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Methodology -->
+<section class="section alt" id="methodology">
+  <div class="container">
+    <h2>Methodology & Data Accuracy</h2>
+    <p class="section-desc">Transparency about where this data comes from and why it's reliable.</p>
+
+    <div class="method-grid">
+      <div class="method-card">
+        <h3>Occupation Data (BLS)</h3>
+        <p>All 342 occupations from the Bureau of Labor Statistics <a href="https://www.bls.gov/ooh/" target="_blank">Occupational Outlook Handbook</a> — the federal government's authoritative source on US employment. Includes median pay, employment counts, education requirements, and 10-year growth projections. BLS projects 5.2M new jobs and 3.1% total growth 2024–2034. BLS explicitly factors AI into projections: they modeled AI impact on specific occupations like medical transcriptionists (-4.7%), customer service reps (-5.0%), paralegals (1.2%), and software developers (+17.9%).</p>
+        <div class="method-tag">Federal government data &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Methodology (Feb 2025)</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>AI Exposure Scoring (JoshKale/jobs)</h3>
+        <p>Each occupation's AI exposure score (0–10) was generated by sending the full BLS Markdown description to <strong>Gemini Flash</strong> (via OpenRouter) with a calibrated rubric. The rubric anchors: roofers/landscapers at 0–1, nurses/police at 4–5, developers/analysts at 8–9, data entry at 10. Key signal: is the work fundamentally digital? Scores are cross-validated against Anthropic's independent β metric. Average across all 342 occupations: 5.3/10.</p>
+        <div class="method-tag">LLM-scored with calibrated rubric &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">Full source & rationales on GitHub</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>Anthropic Economic Index</h3>
+        <p><a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Published research</a> introducing "observed exposure" — combining theoretical capability (β metric from Eloundou et al.) with real Claude usage data from millions of conversations. 57% of AI use augments work; 43% automates tasks. 68% of usage targets β=1 tasks. As of Jan 2025, 36% of sampled jobs see Claude used for 25%+ of tasks (rising to 49% across pooled reports). This is real-world data, not speculation.</p>
+        <div class="method-tag">Real usage data from Claude &middot; <a href="https://www.anthropic.com/economic-index" target="_blank">Anthropic Economic Index</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>Empirical Productivity Studies</h3>
+        <p>The AI-skill advantage projections are grounded in peer-reviewed experiments: <strong>Noy & Zhang (2023)</strong>: 40% time reduction, +18% quality (n=453). <strong>Brynjolfsson et al. (2025)</strong>: 15% avg productivity gain, 36% for bottom quintile (n=5,172). <strong>Peng et al.</strong>: GitHub Copilot 55.8% faster. <strong>Cui et al. (2025)</strong>: 26% more weekly tasks (n=5,000). <strong>St. Louis Fed</strong>: 33% more productive during AI use, 5.4% time savings. Key pattern: AI disproportionately benefits lower-performing workers (skill compression).</p>
+        <div class="method-tag">Peer-reviewed field experiments &middot; <a href="https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/" target="_blank">Full review of evidence</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>PwC Global AI Jobs Barometer</h3>
+        <p>Analysis of <strong>1 billion+ job postings</strong> across 6 continents. AI-skilled roles pay 56% more (doubled from 25% in 2023). AI-exposed industries see 27% productivity growth vs 9% for unexposed (3x gap). AI-requiring postings grew +7.5% even as total postings fell -11.3%. Degree requirements dropping 7–9pp in AI roles. Skills in exposed roles changing 66% faster. This is the largest dataset on AI's actual labor market impact.</p>
+        <div class="method-tag">1B+ job postings analyzed &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC 2025 Barometer</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>AI Improvement Rate & Limitations</h3>
+        <p>Our projections account for AI's acceleration: Anthropic's coverage gap (94% theoretical vs 33% actual) is closing — usage rose from 36% to 49% of sampled jobs between reports. BLS notes technology impacts "tend to take longer than technologists expect" but AI may break this pattern. We model an S-curve adoption where displacement accelerates mid-decade. <strong>Key limitations:</strong> (1) AI advancement may be faster or slower than modeled; (2) policy/regulation could alter outcomes; (3) new job categories will emerge; (4) individual outcomes vary enormously. Projections are directional, not precise.</p>
+        <div class="method-tag">Accounts for acceleration &middot; Honest about uncertainty</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <p>Data: <a href="https://www.bls.gov/ooh/" target="_blank">BLS OOH</a> &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Projections (Feb 2025)</a> &middot; <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic Economic Index</a> &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC AI Jobs Barometer</a> &middot; <a href="https://www.stlouisfed.org/on-the-economy/2025/feb/impact-generative-ai-work-productivity" target="_blank">St. Louis Fed</a> &middot; <a href="https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/" target="_blank">ICLE Empirical Review</a> &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a></p>
+    <p class="footer-note">342 BLS occupations (2024). AI exposure by Gemini Flash. Skill-impact projections are models grounded in published empirical research. Accounts for AI acceleration via S-curve adoption modeling. Not financial or career advice.</p>
+  </div>
+</footer>
+
+<script src="occupation_data.js"></script>
+<script src="data.js"></script>
+<script src="charts.js"></script>
+</body>
+</html>
