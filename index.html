@@ -45,6 +45,7 @@
   <div class="nav-inner">
     <a href="#master" class="nav-link active">Master View</a>
     <a href="#overview" class="nav-link">Exposure Landscape</a>
+    <a href="#coverage-gap" class="nav-link">The Coverage Gap</a>
     <a href="#ai-skills" class="nav-link">AI Skill Advantage</a>
     <a href="#education" class="nav-link">Degree vs No Degree</a>
     <a href="#timeline" class="nav-link">2024–2034 Outlook</a>
@@ -115,11 +116,47 @@
   </div>
 </section>
 
-<!-- Section 2: AI Skill Advantage -->
+<!-- Section 2: The Coverage Gap -->
+<section class="section" id="coverage-gap">
+  <div class="container">
+    <h2>The Coverage Gap: What AI Can Do vs What It Actually Does</h2>
+    <p class="section-desc">This may be the most important — and least understood — dynamic in the AI labor market. There is a massive gap between what AI is <em>theoretically capable</em> of doing in each sector and what it is <em>actually being used</em> for today. This concept, introduced by Anthropic's Economic Index, is called "the coverage gap." It's the reason the AI revolution feels both overhyped and underestimated at the same time — and it's the single biggest opportunity for workers who learn to use AI effectively.</p>
+
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>Theoretical AI Capability vs Actual Usage by Sector</h3>
+        <p class="chart-desc">The <strong style="color:#a78bfa;">purple bars</strong> show what percentage of tasks AI could theoretically handle in each sector, based on the Eloundou et al. β metric (a measure of how many occupational tasks could be sped up by AI tools). The <strong style="color:#60a5fa;">blue bars</strong> show what percentage of tasks are actually being done with AI today, based on Anthropic's analysis of ~2 million real Claude conversations (Jan 2026 report). The gap between them represents unrealized potential — work that AI <em>could</em> do but isn't doing yet, either because organizations haven't adopted it, workers don't know how to use it, or trust and process barriers remain.</p>
+        <canvas id="coverageGap"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>What the Gap Means in Each Sector</h3>
+        <p class="chart-desc">The coverage gap varies dramatically by sector — and understanding why reveals where the biggest opportunities and risks lie.</p>
+        <div class="insight-cards" id="coverageGapDetails"></div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-card wide" style="background:rgba(167,139,250,0.06); border-color:rgba(167,139,250,0.15);">
+        <h3>Why This Matters</h3>
+        <p class="chart-desc" style="font-size:13px; line-height:1.7; color:var(--fg); max-width:none;">
+          The coverage gap is the reason AI-skilled workers earn a 56% wage premium (PwC). Every percentage point of that gap that a worker can close for their employer translates directly into value. A lawyer who uses AI to review documents in 2 hours instead of 20 isn't just faster — they're capturing value that was previously locked behind organizational inertia.<br><br>
+          But the gap is closing. Anthropic's data shows that between their first and second reports, the share of occupations where Claude is used for 25%+ of tasks rose from 36% to 49%. Census Bureau data shows firm-level AI adoption doubled from 4.6% to ~10% in under two years. As adoption accelerates along an S-curve, the window for workers to get ahead of the curve narrows.<br><br>
+          <strong>The Yale Budget Lab adds critical nuance:</strong> their comparison of 7 different AI exposure measures found that the measures broadly agree on which jobs have <em>low</em> exposure (physical, manual work) but disagree significantly on which jobs have <em>high</em> exposure. This means the purple "theoretical" bars above carry meaningful uncertainty — the true capability ceiling may be higher or lower for specific occupations. What is not in dispute is that actual usage is far below every measure of theoretical capability.<br><br>
+          <strong>Bottom line:</strong> If you work in a sector with a large coverage gap, there's a window right now where learning to use AI effectively creates outsized career advantage. That window won't stay open forever.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: AI Skill Advantage -->
 <section class="section" id="ai-skills">
   <div class="container">
     <h2>The AI Skill Advantage</h2>
-    <p class="section-desc">The most important finding across all the research: the critical dividing line isn't "will AI affect your job?" — it's "do you know how to use AI?" PwC's analysis of over 1 billion job postings shows AI-skilled workers earn a 56% wage premium (up from 25% in 2023). Empirical studies consistently show 15–55% productivity gains for AI users. Meanwhile, Anthropic found that theoretical AI capability (94% in tech) far exceeds actual usage (35.8%) — the workers who close that gap capture enormous value. This section explores the widening chasm between AI-proficient and non-proficient workers.</p>
+    <p class="section-desc">As the coverage gap above makes clear, AI's potential far exceeds its current usage — and the workers who close that gap are the ones winning. PwC's analysis of over 1 billion job postings shows AI-skilled workers earn a 56% wage premium (up from 25% in 2023). Empirical studies consistently show 15–55% productivity gains for AI users. This section explores the widening chasm between AI-proficient and non-proficient workers — and why it matters more than your job title or degree.</p>
     <div class="chart-row">
       <div class="chart-card wide">
         <h3>Projected Career Trajectory: AI-Skilled vs Not (2024–2034)</h3>
@@ -136,13 +173,6 @@
       <div class="chart-card">
         <h3>Why AI Proficiency Matters</h3>
         <div class="insight-cards" id="insightCards"></div>
-      </div>
-    </div>
-    <div class="chart-row">
-      <div class="chart-card wide">
-        <h3>The Coverage Gap: What AI Can Do vs What It Does</h3>
-        <p class="chart-desc">Anthropic's Economic Index reveals a massive disconnect between what AI <em>can</em> do (purple bars) and what it actually <em>does</em> today (blue bars). In Computer & Math, AI could theoretically handle 94% of tasks but only 35.8% are done with AI. Legal shows 89% theoretical vs 20.4% actual. The gap exists everywhere due to adoption lag, organizational inertia, and trust barriers. This is why AI-skilled workers have such an advantage — the opportunity space is enormous. Theoretical capability from the Eloundou et al. β metric; actual usage from Anthropic's Jan 2026 analysis of ~2M Claude conversations.</p>
-        <canvas id="coverageGap"></canvas>
       </div>
     </div>
   </div>
@@ -220,21 +250,21 @@
     </div>
 
     <!-- Conclusion -->
-    <div style="margin-top:40px; padding:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px;">
-      <h3 style="font-size:20px; font-weight:700; margin-bottom:12px;">The Bottom Line</h3>
-      <p style="font-size:14px; color:var(--fg); line-height:1.7; margin-bottom:16px;">
+    <div class="conclusion-box">
+      <h3>The Bottom Line</h3>
+      <p class="cb-lead">
         Across 342 occupations, 143 million US jobs, and research from a dozen major institutions, one pattern emerges clearly: <strong>AI is not replacing all jobs — but it is fundamentally reshaping what qualifications matter.</strong>
       </p>
-      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
-        <strong style="color:var(--fg);">What the data agrees on:</strong> AI disproportionately targets high-paid knowledge work, not manual labor (Anthropic: exposed workers earn 47% more). Workers who learn to use AI see 15–55% productivity gains (6 peer-reviewed studies). AI-skilled roles command a 56% wage premium (PwC, 1B+ job postings). The gap between what AI <em>can</em> do and what it actually <em>does</em> today is enormous — only 35.8% of theoretically automatable Computer & Math tasks are actually done with AI (Anthropic), and only ~10% of firms use AI in production (Census BTOS).
+      <p class="cb-detail">
+        <strong>What the data agrees on:</strong> AI disproportionately targets high-paid knowledge work, not manual labor (Anthropic: exposed workers earn 47% more). Workers who learn to use AI see 15–55% productivity gains (6 peer-reviewed studies). AI-skilled roles command a 56% wage premium (PwC, 1B+ job postings). The gap between what AI <em>can</em> do and what it actually <em>does</em> today is enormous — only 35.8% of theoretically automatable Computer & Math tasks are actually done with AI (Anthropic), and only ~10% of firms use AI in production (Census BTOS).
       </p>
-      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
-        <strong style="color:var(--fg);">Where the data disagrees:</strong> Brynjolfsson/ADP (3.5–5M workers/month) finds young workers ages 22–25 in AI-exposed roles are already seeing 16–20% employment declines. But EIG (5 measures, CPS data) finds no differential impact — unemployment actually rose <em>less</em> for AI-exposed workers. Yale Budget Lab (7 measures) found "stability, not disruption." The disagreement likely comes from different data sources, age breakdowns, and confounding macro factors. Iscenko & Millet (2026) note the declines in AI-exposed job postings began before ChatGPT, suggesting interest rates and post-pandemic corrections play a role too.
+      <p class="cb-detail">
+        <strong>Where the data disagrees:</strong> Brynjolfsson/ADP (3.5–5M workers/month) finds young workers ages 22–25 in AI-exposed roles are already seeing 16–20% employment declines. But EIG (5 measures, CPS data) finds no differential impact — unemployment actually rose <em>less</em> for AI-exposed workers. Yale Budget Lab (7 measures) found "stability, not disruption." The disagreement likely comes from different data sources, age breakdowns, and confounding macro factors. Iscenko & Millet (2026) note the declines in AI-exposed job postings began before ChatGPT, suggesting interest rates and post-pandemic corrections play a role too.
       </p>
-      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
-        <strong style="color:var(--fg);">What this means for you:</strong> The single most consequential variable is not your degree, your industry, or your current job title — it's whether you learn to work <em>with</em> AI. Workers who pair domain expertise with AI proficiency are seeing the largest gains across every study we examined. Workers with the same credentials but no AI skills face the highest risk — especially if their work is digital and pattern-based. Education still matters (it opens doors to higher-value work), but a degree without AI literacy is becoming a depreciating asset in exposed fields.
+      <p class="cb-detail">
+        <strong>What this means for you:</strong> The single most consequential variable is not your degree, your industry, or your current job title — it's whether you learn to work <em>with</em> AI. Workers who pair domain expertise with AI proficiency are seeing the largest gains across every study we examined. Workers with the same credentials but no AI skills face the highest risk — especially if their work is digital and pattern-based. Education still matters (it opens doors to higher-value work), but a degree without AI literacy is becoming a depreciating asset in exposed fields.
       </p>
-      <p style="font-size:14px; color:var(--fg); line-height:1.7; font-weight:500;">
+      <p class="cb-closing">
         The transformation is real, even if its pace is debated. Only ~10% of firms have adopted AI in production, meaning 90% of the disruption is still ahead. The workers, companies, and institutions that take this seriously now — while the evidence is early and the window for adaptation is wide — will be the ones best positioned for what comes next.
       </p>
     </div>

@@ -70,6 +70,7 @@ Chart.defaults.font.size = 11;
   buildProficiencyGap();
   buildInsightCards();
   buildCoverageGap();
+  buildCoverageGapDetails();
   buildEduExposure(DATA);
   buildEduPayVsExposure(DATA);
   buildEduAiSkill();
@@ -297,10 +298,11 @@ function buildTreemap(DATA) {
       <span class="label">Education</span><span class="value">${d.education || '—'}</span>
       <span class="label">Sector</span><span class="value">${CAT_NAMES[d.category] || d.category}</span>`;
     tt.querySelector(".tt-rationale").textContent = d.exposure_rationale || "";
+    const ttW = Math.min(340, window.innerWidth - 20);
     let tx = mx + 14, ty = my - 14;
-    if (tx + 340 > window.innerWidth) tx = mx - 350;
+    if (tx + ttW > window.innerWidth - 10) tx = Math.max(10, mx - ttW - 10);
     if (ty < 10) ty = my + 14;
-    if (ty + 200 > window.innerHeight) ty = my - 200;
+    if (ty + 200 > window.innerHeight) ty = Math.max(10, my - 200);
     tt.style.left = tx + "px"; tt.style.top = ty + "px";
     tt.classList.add("visible");
   }
@@ -313,6 +315,27 @@ function buildTreemap(DATA) {
     else { hideTooltip(); canvas.style.cursor = "default"; }
   });
   canvas.addEventListener("mouseleave", () => { hovered = null; hideTooltip(); draw(); });
+
+  // Touch support for mobile
+  canvas.addEventListener("touchstart", e => {
+    const touch = e.touches[0];
+    const hit = hitTest(touch.clientX, touch.clientY);
+    if (hit !== hovered) { hovered = hit; draw(); }
+    if (hovered) { e.preventDefault(); showTooltip(hovered, touch.clientX, touch.clientY); }
+    else { hideTooltip(); }
+  }, { passive: false });
+  canvas.addEventListener("touchmove", e => {
+    const touch = e.touches[0];
+    const hit = hitTest(touch.clientX, touch.clientY);
+    if (hit !== hovered) { hovered = hit; draw(); }
+    if (hovered) { e.preventDefault(); showTooltip(hovered, touch.clientX, touch.clientY); }
+    else { hideTooltip(); }
+  }, { passive: false });
+  canvas.addEventListener("touchend", () => {
+    if (hovered && hovered.url) window.open(hovered.url, "_blank");
+    setTimeout(() => { hovered = null; hideTooltip(); draw(); }, 1500);
+  });
+
   canvas.addEventListener("click", e => {
     const hit = hitTest(e.clientX, e.clientY);
     if (hit && hit.url) window.open(hit.url, "_blank");
@@ -524,6 +547,66 @@ function buildCoverageGap() {
       scales: { y: { min: 0, max: 100, title: { display: true, text: "% of Tasks" }, ticks: { callback: v => v+"%" } } }
     }
   });
+}
+
+// ── 8b. Coverage Gap Details (per-sector breakdown) ─────────────────────
+
+function buildCoverageGapDetails() {
+  const sectors = [
+    {
+      icon: "&#x1F4BB;", bg: "rgba(96,165,250,0.12)",
+      title: "Computer & Math — 94% theoretical → 35.8% actual",
+      gap: "58.2pp gap",
+      body: "The highest theoretical exposure of any sector — nearly every task in software development, data analysis, and IT support is deemed automatable by Eloundou et al.'s β metric. Yet only about a third of work is actually done with AI. Why? Many tasks require context about proprietary systems, legacy code, and organizational knowledge that AI can't access. Security and compliance constraints block AI from production environments. And the 'last mile' of debugging, deployment, and stakeholder communication remains human. Still, this sector has the <strong>smallest</strong> gap — adoption is furthest along here.",
+      statLabel: "Gap", stat: "58.2pp", statColor: "#60a5fa"
+    },
+    {
+      icon: "&#x1F4CB;", bg: "rgba(251,191,36,0.12)",
+      title: "Office & Admin — 90% theoretical → 34.3% actual",
+      gap: "55.7pp gap",
+      body: "Scheduling, data entry, correspondence, record-keeping — these tasks score extremely high on AI capability assessments. But adoption is held back by organizational inertia, fragmented IT systems, and the fact that many admin roles serve as 'glue' connecting departments through human judgment and relationship management. Census BTOS data shows even in the Information sector, >60% of firms haven't adopted AI. For office workers in less tech-forward industries (healthcare admin, local government), adoption lags further. The gap here represents massive untapped potential — and future risk for workers who don't adapt.",
+      statLabel: "Gap", stat: "55.7pp", statColor: "#fbbf24"
+    },
+    {
+      icon: "&#x1F4B0;", bg: "rgba(52,211,153,0.12)",
+      title: "Business & Finance — 88% theoretical → 28.4% actual",
+      gap: "59.6pp gap",
+      body: "Financial analysis, reporting, forecasting, and compliance tasks rate extremely high on theoretical automability. Actual usage is moderate — AI excels at pattern recognition in financial data, but regulatory requirements, fiduciary duties, and the need for human accountability in financial decisions slow adoption. Client-facing advisory work, complex negotiations, and strategic planning remain firmly human. The 59.6pp gap is the <strong>largest</strong> of any sector measured, suggesting significant disruption ahead as compliance frameworks catch up to AI capabilities.",
+      statLabel: "Gap", stat: "59.6pp", statColor: "#34d399"
+    },
+    {
+      icon: "&#x1F6D2;", bg: "rgba(251,146,60,0.12)",
+      title: "Sales — 62% theoretical → 26.9% actual",
+      gap: "35.1pp gap",
+      body: "Sales has the <strong>lowest theoretical exposure</strong> of the six sectors — many sales tasks depend on relationship-building, persuasion, and reading social cues that AI handles poorly. Yet its actual usage rate (26.9%) is relatively close to sectors with much higher theoretical scores. This suggests sales professionals are adopting AI for the tasks it does well (lead research, email drafting, CRM analysis, proposal generation) while the human-centric core of selling remains untouched. The <strong>smallest gap</strong> (35.1pp) reflects a pragmatic, targeted adoption pattern.",
+      statLabel: "Gap", stat: "35.1pp", statColor: "#fb923c"
+    },
+    {
+      icon: "&#x2696;", bg: "rgba(167,139,250,0.12)",
+      title: "Legal — 89% theoretical → 20.4% actual",
+      gap: "68.6pp gap",
+      body: "Legal work scores near the top on theoretical exposure — document review, case research, contract analysis, and regulatory interpretation are all tasks AI can perform. But actual usage is strikingly low at just 20.4%. This reflects a profession where accuracy has extreme consequences (malpractice liability), where attorney-client privilege creates data barriers, and where courts and regulators are slow to accept AI-generated work. Schwarcz et al. found law students saved 50–130% of time on complex tasks with AI — the capability is real, but institutional adoption barriers are the steepest of any sector measured.",
+      statLabel: "Gap", stat: "68.6pp", statColor: "#a78bfa"
+    },
+    {
+      icon: "&#x1F3A8;", bg: "rgba(244,114,182,0.12)",
+      title: "Arts & Media — 83.7% theoretical → 19.2% actual",
+      gap: "64.5pp gap",
+      body: "AI image generators, writing assistants, and video tools score high on task automation metrics. But actual usage is the <strong>lowest</strong> of any sector at 19.2%. Creative work involves taste, cultural context, brand identity, and originality that AI struggles with — and clients and audiences often resist AI-generated content. There's also active industry pushback: copyright disputes, union negotiations (SAG-AFTRA), and audience authenticity concerns all slow adoption. The 64.5pp gap suggests this sector may see slower disruption than theorists predicted, at least in the near term.",
+      statLabel: "Gap", stat: "64.5pp", statColor: "#f472b6"
+    },
+  ];
+
+  document.getElementById("coverageGapDetails").innerHTML = sectors.map(s =>
+    `<div class="insight-card">
+      <div class="ic-header">
+        <div class="ic-icon" style="background:${s.bg}">${s.icon}</div>
+        <div class="ic-title">${s.title}</div>
+      </div>
+      <div class="ic-body">${s.body}</div>
+      <div class="ic-stat" style="color:${s.statColor}">${s.stat}</div>
+    </div>`
+  ).join("");
 }
 
 // ── 9. Education Exposure ──────────────────────────────────────────────

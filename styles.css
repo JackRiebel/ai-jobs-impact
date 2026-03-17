@@ -311,13 +311,137 @@ footer {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 
-/* Responsive */
+/* Prevent horizontal overflow from full-bleed treemap */
+html, body { overflow-x: hidden; }
+
+/* Hide nav scrollbar but keep scroll functionality */
+.nav-inner {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+
+/* Conclusion box */
+.conclusion-box {
+  margin-top: 40px;
+  padding: 28px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+.conclusion-box h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.conclusion-box .cb-lead { font-size: 14px; color: var(--fg); line-height: 1.7; margin-bottom: 16px; }
+.conclusion-box .cb-detail { font-size: 13px; color: var(--fg2); line-height: 1.7; margin-bottom: 12px; }
+.conclusion-box .cb-detail strong { color: var(--fg); }
+.conclusion-box .cb-closing { font-size: 14px; color: var(--fg); line-height: 1.7; font-weight: 500; }
+
+/* ── Responsive: tablets & small desktops ─────────────── */
+@media (max-width: 900px) {
+  .hero { padding: 64px 20px 40px; }
+  .findings-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+}
+
+/* ── Responsive: phones ───────────────────────────────── */
 @media (max-width: 700px) {
-  .hero-stats { gap: 20px; }
-  .hero-stat-value { font-size: 28px; }
-  .chart-row { flex-direction: column; }
-  .chart-card { min-width: unset; }
-  .matrix-grid { grid-template-columns: 1fr; }
+  /* Hero */
+  .hero { padding: 48px 16px 32px; }
+  .hero .subtitle { font-size: 14px; margin-bottom: 24px; }
+  .hero-stats { gap: 16px; }
+  .hero-stat-value { font-size: 26px; }
+  .hero-stat-label { font-size: 11px; }
+  .hero-sources { font-size: 11px; }
+
+  /* Navigation */
   .nav-inner { padding: 6px 8px; }
+  .nav-link { padding: 5px 10px; font-size: 12px; }
+
+  /* Sections */
+  .section { padding: 36px 14px; }
+  .section h2 { font-size: 21px; margin-bottom: 6px; }
+  .section-desc { font-size: 13px; margin-bottom: 20px; }
+
+  /* Chart cards */
+  .chart-row { flex-direction: column; gap: 12px; }
+  .chart-card { min-width: unset; padding: 14px; }
+  .chart-card h3 { font-size: 14px; }
+  .chart-card .chart-desc { font-size: 11px; margin-bottom: 10px; }
+
+  /* Treemap */
+  .treemap-wrapper { height: 55vh; min-height: 350px; }
+  .treemap-tooltip { max-width: 260px; font-size: 12px; padding: 10px 12px; }
+  .treemap-tooltip .tt-title { font-size: 13px; }
+  .treemap-tooltip .tt-stats { font-size: 11px; gap: 2px 8px; }
+  .treemap-tooltip .tt-rationale { font-size: 10px; }
+  .treemap-legend { font-size: 10px; gap: 6px; flex-wrap: wrap; }
+
+  /* Job lists */
+  .job-list { max-height: 300px; }
+  .job-row { padding: 5px 6px; gap: 6px; }
+  .job-row .job-title { font-size: 11px; }
+  .job-row .job-meta { font-size: 9px; }
+
+  /* Insight cards */
+  .insight-card { padding: 12px; }
+  .insight-card .ic-title { font-size: 12px; }
+  .insight-card .ic-body { font-size: 11px; }
+  .insight-card .ic-stat { font-size: 18px; }
+  .insight-card .ic-icon { width: 28px; height: 28px; font-size: 16px; }
+
+  /* Matrix */
+  .matrix-grid { grid-template-columns: 1fr; gap: 10px; }
+  .matrix-cell { padding: 14px; }
+  .matrix-cell h4 { font-size: 13px; }
+  .matrix-cell p { font-size: 11px; }
+  .matrix-cell .mc-outlook { font-size: 12px; }
+  .matrix-cell .mc-examples { font-size: 10px; }
+
+  /* Findings */
+  .key-findings h3 { font-size: 16px; }
+  .findings-grid { grid-template-columns: 1fr; gap: 10px; }
+  .finding-card { padding: 14px; }
+  .finding-card .fc-stat { font-size: 22px; }
+  .finding-card .fc-title { font-size: 12px; }
+  .finding-card .fc-body { font-size: 10px; }
+
+  /* Methodology */
   .method-grid { grid-template-columns: 1fr; }
+  .method-card { padding: 16px; }
+  .method-card h3 { font-size: 14px; }
+  .method-card p { font-size: 12px; }
+
+  /* Conclusion */
+  .conclusion-box { padding: 18px; margin-top: 28px; }
+  .conclusion-box h3 { font-size: 17px; }
+  .conclusion-box .cb-lead { font-size: 13px; }
+  .conclusion-box .cb-detail { font-size: 12px; }
+  .conclusion-box .cb-closing { font-size: 13px; }
+
+  /* Footer */
+  footer { padding: 20px 14px; }
+  footer p { font-size: 11px; line-height: 1.6; }
+  .footer-note { font-size: 10px; }
+}
+
+/* ── Responsive: very small phones ────────────────────── */
+@media (max-width: 400px) {
+  .hero { padding: 36px 12px 24px; }
+  .hero h1 { font-size: 24px; }
+  .hero .subtitle { font-size: 13px; }
+  .hero-stat-value { font-size: 22px; }
+  .hero-stats { gap: 10px; }
+
+  .section { padding: 28px 10px; }
+  .section h2 { font-size: 19px; }
+  .chart-card { padding: 10px; border-radius: 8px; }
+
+  .treemap-wrapper { height: 45vh; min-height: 280px; }
+
+  .nav-link { padding: 4px 8px; font-size: 11px; }
+
+  .job-row .job-meta { display: none; }
+
+  .conclusion-box { padding: 14px; margin-top: 20px; }
+  .method-card { padding: 12px; }
+  .matrix-cell { padding: 12px; }
 }
