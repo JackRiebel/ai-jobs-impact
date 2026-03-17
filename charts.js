@@ -76,6 +76,8 @@ Chart.defaults.font.size = 11;
   buildEduMatrix();
   buildOutlookByExposure(DATA);
   buildGrowthProjection();
+  buildYoungWorkerImpact();
+  buildAdoptionRate();
   buildFindings();
   setupNav();
 })();
@@ -496,7 +498,7 @@ function buildInsightCards() {
     { icon: "&#x1F4C8;", bg: "rgba(96,165,250,0.12)", title: "Productivity Multiplier",
       body: "Empirical studies show 15–55% task-time reduction. GitHub Copilot: 55.8% faster. Customer support: 15% avg, 36% for bottom quintile.", stat: "15–55%", statColor: "#60a5fa" },
     { icon: "&#x1F4C9;", bg: "rgba(248,113,113,0.12)", title: "Young Worker Warning",
-      body: "Anthropic: 14% decline in job-finding rates for ages 22–25 in exposed occupations since ChatGPT launch. Entry-level digital roles shrinking first.", stat: "-14%", statColor: "#f87171" },
+      body: "Brynjolfsson/ADP (3.5–5M workers/month): ages 22–25 in high-exposure jobs saw 16% employment decline. Software devs: -20%. But EIG found unemployment rose less for AI-exposed workers. Evidence is contested.", stat: "-16%", statColor: "#f87171" },
     { icon: "&#x1F6E1;", bg: "rgba(251,191,36,0.12)", title: "Skills Changing 66% Faster",
       body: "PwC: skills demanded in AI-exposed roles are changing 66% faster than other jobs (up from 25%). Adapt or fall behind.", stat: "66%", statColor: "#fbbf24" },
   ];
@@ -656,26 +658,86 @@ function buildGrowthProjection() {
   });
 }
 
-// ── 15. Key Findings ───────────────────────────────────────────────────
+// ── 15. Young Worker Impact (Brynjolfsson/ADP) ─────────────────────────
+
+function buildYoungWorkerImpact() {
+  // Brynjolfsson, Chandar & Chen (2025), Stanford/ADP, 3.5-5M workers/month
+  // Updated Nov 2025. Controlled for remote work, tech sector, interest rate sensitivity
+  const occupations = ["Software\nDevelopers", "Customer\nService", "Marketing\n& Sales", "Accounting", "Health\nAides"];
+  const young = [-20, -15, -12, -10, 8];   // ages 22-25
+  const older = [6, 3, 7, 5, 12];          // ages 30+
+
+  new Chart(document.getElementById("youngWorkerImpact"), {
+    type: "bar",
+    data: {
+      labels: occupations,
+      datasets: [
+        { label: "Ages 22–25", data: young, backgroundColor: young.map(v => v < 0 ? "rgba(248,113,113,0.65)" : "rgba(52,211,153,0.65)"), borderColor: young.map(v => v < 0 ? "#f87171" : "#34d399"), borderWidth: 1, borderRadius: 4 },
+        { label: "Ages 30+", data: older, backgroundColor: "rgba(96,165,250,0.65)", borderColor: "#60a5fa", borderWidth: 1, borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: "top", labels: { usePointStyle: true, padding: 10 } }, tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw > 0 ? "+" : ""}${ctx.raw}%` } } },
+      scales: {
+        x: { title: { display: true, text: "Occupation" } },
+        y: { title: { display: true, text: "Employment Change Since Late 2022" }, ticks: { callback: v => (v > 0 ? "+" : "") + v + "%" } }
+      }
+    }
+  });
+}
+
+// ── 16. AI Adoption Rate (Census BTOS) ──────────────────────────────────
+
+function buildAdoptionRate() {
+  // Census Bureau BTOS via Goldschlag (2025). Actual firm-level adoption data.
+  const labels = ["All Firms\n(production)", "All Firms\n(any function)", "Information", "Publishing", "Data\nProcessing", "Prof. /\nTech Services"];
+  const values = [10, 17.3, 27, 36, 35, 15];
+
+  new Chart(document.getElementById("adoptionRate"), {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "% of Firms Using AI",
+        data: values,
+        backgroundColor: values.map(v => `rgba(167,139,250,${0.3 + v / 60})`),
+        borderColor: "#a78bfa",
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}% of firms` } } },
+      scales: {
+        x: { title: { display: true, text: "Sector (Census BTOS, Nov 2025)" } },
+        y: { min: 0, max: 45, title: { display: true, text: "% of Firms Using AI" }, ticks: { callback: v => v + "%" } }
+      }
+    }
+  });
+}
+
+// ── 17. Key Findings ───────────────────────────────────────────────────
 
 function buildFindings() {
   const findings = [
-    { stat: "94% vs 33%", color: "#a78bfa", title: "The Coverage Gap",
-      body: "Anthropic: AI can theoretically handle 94% of Computer & Math tasks, but only 33% are done by AI in practice. Massive unrealized potential." },
+    { stat: "-20%", color: "#f87171", title: "Young Software Devs Hit Hardest",
+      body: "Brynjolfsson/ADP (3.5–5M workers/month): Software developers ages 22–25 saw employment fall 20% from late-2022 peak, while older devs grew +6%. Controlled for remote work, tech sector, and interest rates." },
     { stat: "+56%", color: "#34d399", title: "AI Wage Premium",
-      body: "PwC (1B+ job postings): AI-skilled roles pay 56% more — doubled from 25% in just one year. The premium exists in every industry." },
-    { stat: "4x", color: "#fb923c", title: "Graduate Degree Risk",
-      body: "Anthropic: exposed workers are 4x more likely to hold graduate degrees (17.4% vs 4.5%). Higher education = higher exposure to AI disruption." },
-    { stat: "-0.6pp", color: "#f87171", title: "Growth Impact per 10pp",
-      body: "Anthropic: every 10pp increase in AI coverage reduces BLS employment growth projections by 0.6 percentage points through 2034." },
-    { stat: "-14%", color: "#c084fc", title: "Young Worker Alert",
-      body: "Anthropic: workers 22–25 in exposed occupations see 14% decline in job-finding rates post-ChatGPT. Fortune reports a 16% employment fall." },
+      body: "PwC (1B+ job postings, 6 continents): roles requiring AI skills pay 56% more on average — doubled from 25% in 2023. The premium exists in every industry and geography analyzed." },
+    { stat: "~10%", color: "#a78bfa", title: "Most Firms Haven't Started",
+      body: "Census Bureau BTOS: only ~10% of firms use AI in production as of Sept 2025 (up from 4.6% in early 2024). Even in Information sector, >60% of firms don't use AI. The disruption is still early." },
+    { stat: "0.30 vs 0.94", color: "#60a5fa", title: "Counterpoint: EIG Data",
+      body: "Eckhardt & Goldschlag (EIG, 5 AI exposure measures): unemployment rose just 0.30pp for most-exposed workers vs 0.94pp for least-exposed. 95% of firms report zero net AI employment impact. Opposite of displacement narrative." },
+    { stat: "94→36%", color: "#fb923c", title: "The Coverage Gap",
+      body: "Anthropic: AI can theoretically handle 94% of Computer & Math tasks, but only 35.8% are done with AI. Yale Budget Lab (7 measures): exposure ≠ usage. Office jobs rank high on exposure but low on actual usage." },
     { stat: "+47%", color: "#fbbf24", title: "Exposed = Well-Paid",
-      body: "Anthropic: highly exposed workers earn 47% more. AI targets valuable knowledge work, not minimum-wage manual labor." },
+      body: "Anthropic: highly exposed workers earn 47% more than unexposed. AI targets valuable knowledge work (analysis, writing, coding), not minimum-wage manual labor. The opposite of past automation waves." },
     { stat: "55.8%", color: "#60a5fa", title: "Copilot Productivity Gain",
-      body: "Peng et al.: GitHub Copilot users complete coding tasks 55.8% faster. Brynjolfsson: 36% gain for lowest-skilled customer service agents." },
-    { stat: "1.34%", color: "#f87171", title: "High-Exposure Growth Stalls",
-      body: "Real BLS data: occupations with exposure 8–10 average just 1.34% projected growth vs 5.02% for low-exposure (2–3) jobs." },
+      body: "Peng et al.: GitHub Copilot users complete coding tasks 55.8% faster. Brynjolfsson (n=5,172): 15% avg gain, 36% for bottom quintile. Noy & Zhang (n=453): 40% time reduction, +18% quality." },
+    { stat: "Inconclusive", color: "#94a3b8", title: "Brookings: Research Is Early",
+      body: "Kolko (Brookings, March 2026): evidence on AI labor market impact is collectively inconclusive. Different exposure measures disagree. Occupational churn since 2022 is 'not atypical' vs PC era (1984) or Internet era (1996). Beware 'narrator bias.'" },
   ];
   document.getElementById("findingsGrid").innerHTML = findings.map(f =>
     `<div class="finding-card"><div class="fc-stat" style="color:${f.color}">${f.stat}</div><div class="fc-title">${f.title}</div><div class="fc-body">${f.body}</div></div>`

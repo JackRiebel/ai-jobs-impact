@@ -186,7 +186,7 @@
 <section class="section" id="timeline">
   <div class="container">
     <h2>The Road Ahead: 2024–2034</h2>
-    <p class="section-desc">The Bureau of Labor Statistics projects employment growth for every occupation through 2034, and for the first time (Feb 2025), they explicitly factored AI into those projections. When we overlay AI exposure scores onto this data, a clear pattern emerges: high-exposure occupations (8–10) average just 1.34% projected growth compared to 5.02% for low-exposure (2–3) jobs. BLS modeled specific AI impacts on occupations like software developers (+17.9% growth, AI increases demand), medical transcriptionists (-4.7%, AI replaces), and customer service reps (-5.0%, AI automates). This section shows how these forces play out across all 342 occupations.</p>
+    <p class="section-desc">The Bureau of Labor Statistics projects employment growth for every occupation through 2034, and for the first time (Feb 2025), they explicitly factored AI into those projections. When we overlay AI exposure scores, high-exposure occupations (8–10) average just 1.34% projected growth compared to 5.02% for low-exposure (2–3) jobs. BLS modeled specific AI impacts: software developers (+17.9%, AI increases demand), medical transcriptionists (-4.7%, AI replaces), customer service reps (-5.0%, AI automates). <strong>Important context:</strong> Brookings (March 2026) notes this research is "still in the first inning." EIG found no detectable AI-driven job losses across 5 measures. Yale Budget Lab found "stability, not major disruption." Only ~10% of firms use AI in production (Census BTOS). The effects below will likely intensify as adoption grows.</p>
     <div class="chart-row">
       <div class="chart-card wide">
         <h3>BLS Employment Growth vs AI Exposure (Real Data)</h3>
@@ -201,8 +201,21 @@
         <canvas id="growthProjection"></canvas>
       </div>
     </div>
+    <div class="chart-row">
+      <div class="chart-card">
+        <h3>The Age Divide: Young vs Older Workers (ADP Data)</h3>
+        <p class="chart-desc">Brynjolfsson, Chandar & Chen analyzed 3.5–5 million workers per month via ADP payroll data — the largest study of its kind. Young workers (22–25) in AI-exposed occupations are being hit hard: software devs down 20%, customer service down 15%. But older workers (30+) in the same jobs are <em>growing</em>. The mechanism: firms aren't laying off — they're freezing entry-level hiring. This controlled for remote work, tech sector effects, interest rates, and pandemic corrections.</p>
+        <canvas id="youngWorkerImpact"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>AI Adoption Is Still Early (Census Bureau)</h3>
+        <p class="chart-desc">Before assuming AI is disrupting everything, consider this: only ~10% of US firms use AI in production as of Sept 2025 (up from 4.6% in early 2024). Even the Information sector — the most AI-forward — has >60% of firms not using AI at all. The disruption we're seeing is from early adopters. As adoption climbs from 10% toward 50%+, the effects modeled elsewhere on this page will intensify. Data from Census Bureau Business Trends and Outlook Survey (BTOS).</p>
+        <canvas id="adoptionRate"></canvas>
+      </div>
+    </div>
     <div class="key-findings">
       <h3>Key Research Findings</h3>
+      <p class="section-desc" style="margin-bottom:14px;">Each finding below cites a specific study with sample size, methodology, and source. The evidence is mixed — some studies find clear displacement effects, others find none. We present both sides. As Brookings notes (March 2026): "the evidence on how AI is affecting the labor market today is inconclusive."</p>
       <div class="findings-grid" id="findingsGrid"></div>
     </div>
   </div>
@@ -246,6 +259,24 @@
       </div>
 
       <div class="method-card">
+        <h3>Brynjolfsson/ADP Employment Study</h3>
+        <p><strong>Brynjolfsson, Chandar & Chen (2025)</strong>, Stanford Digital Economy Lab. Analyzed <strong>3.5–5M workers monthly</strong> via ADP payroll data (25M+ US workers total) — the largest AI employment study to date. Uses firm-level fixed effects to control for tech sector, remote work, interest rates, and pandemic corrections. Found 16% relative employment decline for ages 22–25 in high-exposure occupations, but crucially distinguishes automation (declining) from augmentation (growing). Updated November 2025.</p>
+        <div class="method-tag">3.5–5M workers/month &middot; <a href="https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/" target="_blank">Stanford DEL</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>Counterpoint: EIG & Yale Budget Lab</h3>
+        <p><strong>Eckhardt & Goldschlag (EIG, 2025)</strong> tested 5 AI exposure measures against CPS employment data and found the <strong>opposite</strong> pattern: unemployment rose 0.30pp for most-exposed vs 0.94pp for least-exposed workers. 95% of firms report zero net impact. <strong>Yale Budget Lab (Gimbel et al. 2026)</strong> compared 7 AI exposure measures and found "stability, not major disruption." Both note that different measures disagree substantially on which occupations are most exposed. <strong>Brookings (Kolko, March 2026)</strong> meta-analysis: "evidence is inconclusive" and warns of "narrator bias" — researchers are more exposed to AI than past automation, which may color interpretation.</p>
+        <div class="method-tag">Multiple counter-studies &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.brookings.edu/articles/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a></div>
+      </div>
+
+      <div class="method-card">
+        <h3>AI Adoption Data (Census Bureau)</h3>
+        <p>Census Bureau <strong>Business Trends and Outlook Survey (BTOS)</strong>, analyzed by Goldschlag (2025). Only <strong>~10% of firms</strong> use AI in production (Sept 2025), up from 4.6% in early 2024. Broader measure (any business function): 17.3%. Even in the Information sector, >60% of firms don't use AI. This is critical context: most of the disruption modeled on this page is still ahead. The historical pattern (BLS, Brookings) is that technology impacts "take longer than technologists expect" to show up in employment data.</p>
+        <div class="method-tag">Federal survey data &middot; <a href="https://www.census.gov/hfp/btos/data" target="_blank">Census BTOS</a></div>
+      </div>
+
+      <div class="method-card">
         <h3>AI Improvement Rate & Limitations</h3>
         <p>Our projections account for AI's acceleration: Anthropic's coverage gap (94% theoretical vs 33% actual) is closing — usage rose from 36% to 49% of sampled jobs between reports. BLS notes technology impacts "tend to take longer than technologists expect" but AI may break this pattern. We model an S-curve adoption where displacement accelerates mid-decade. <strong>Key limitations:</strong> (1) AI advancement may be faster or slower than modeled; (2) policy/regulation could alter outcomes; (3) new job categories will emerge; (4) individual outcomes vary enormously. Projections are directional, not precise.</p>
         <div class="method-tag">Accounts for acceleration &middot; Honest about uncertainty</div>
@@ -257,8 +288,8 @@
 <!-- Footer -->
 <footer>
   <div class="container">
-    <p>Data: <a href="https://www.bls.gov/ooh/" target="_blank">BLS OOH</a> &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Projections (Feb 2025)</a> &middot; <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic Economic Index</a> &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC AI Jobs Barometer</a> &middot; <a href="https://www.stlouisfed.org/on-the-economy/2025/feb/impact-generative-ai-work-productivity" target="_blank">St. Louis Fed</a> &middot; <a href="https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/" target="_blank">ICLE Empirical Review</a> &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a></p>
-    <p class="footer-note">342 BLS occupations (2024). AI exposure by Gemini Flash. Skill-impact projections are models grounded in published empirical research. Accounts for AI acceleration via S-curve adoption modeling. Not financial or career advice.</p>
+    <p>Data: <a href="https://www.bls.gov/ooh/" target="_blank">BLS OOH</a> &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Methodology</a> &middot; <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic</a> &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC</a> &middot; <a href="https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/" target="_blank">Brynjolfsson/ADP</a> &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.census.gov/hfp/btos/data" target="_blank">Census BTOS</a> &middot; <a href="https://www.brookings.edu/articles/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a> &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a></p>
+    <p class="footer-note">342 BLS occupations (2024). AI exposure by Gemini Flash. Skill-impact projections are models grounded in published empirical research. Evidence on AI's labor market impact is still evolving — we present findings from multiple studies including counterpoints. Not financial or career advice.</p>
   </div>
 </footer>
 

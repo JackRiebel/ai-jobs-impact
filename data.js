@@ -75,6 +75,65 @@ const BLS = {
   trainingSpecialistGrowth: 10.8,// %
 };
 
+// Brynjolfsson, Chandar & Chen (2025) — Stanford/ADP, 3.5–5M workers monthly
+const BRYNJOLFSSON_ADP = {
+  sampleSize: "3.5–5M workers/month",
+  source: "ADP payroll data (25M+ US workers)",
+  youngWorkerDecline: 16,          // % relative employment decline, ages 22-25, high-exposure
+  softwareDevYoungDecline: 20,     // % from late-2022 peak, ages 22-25
+  softwareDevOlderGrowth: 6,       // % growth for older devs
+  customerServiceDecline: 15,      // % early-career decline
+  marketingSalesDecline: 12,       // % ages 22-25
+  olderWorkerGrowth: "6–13",       // % ages 30+, high-exposure jobs
+  entryLevelHiringDecline: 23,     // % vs pre-pandemic
+  recentGradUnemployment: 4.8,     // %
+  allYoungUnemployment: 7.4,       // %
+  // Key: augmentation occupations GREW; automation occupations declined
+  automationVsAugmentation: true,
+  note: "Updated Nov 2025. Firm-level fixed effects, controlled for remote work, tech sector, interest rate sensitivity",
+};
+
+// Eckhardt & Goldschlag (2025) — EIG, CPS data, 5 AI exposure measures
+const EIG = {
+  unemploymentRiseMostExposed: 0.30,  // pp increase, Q5 (most exposed)
+  unemploymentRiseLeastExposed: 0.94, // pp increase, Q1 (least exposed)
+  // Direction is OPPOSITE of displacement narrative
+  firmsNoNetImpact: 95,              // % of firms report zero net AI employment effect
+  firmsExpectIncrease: 6.5,          // % expect AI-related employment increase
+  firmsExpectDecrease: 6.1,          // % expect AI-related employment decrease
+  aiUsingFirmsReplacingTasks: 27,    // % of AI-using firms replacing worker tasks
+  note: "Results robust across all 5 exposure measures tested",
+};
+
+// Yale Budget Lab (Gimbel et al. 2026) — 7 AI exposure measures compared
+const YALE_BUDGET_LAB = {
+  measuresCompared: 7,
+  rSquaredRange: "0.47–0.78",       // between measures
+  noEmploymentDisruption: true,     // "stability, not major disruption"
+  occupationalChurn: "slightly faster but not atypical vs 1984 PC era or 1996 Internet era",
+  note: "Exposure ≠ usage. Measures agree on low-exposure jobs, disagree on high-exposure jobs",
+};
+
+// Census Bureau BTOS (Goldschlag 2025) — actual AI adoption by firms
+const CENSUS_BTOS = {
+  aiInProductionStart2024: 4.6,     // %
+  aiInProductionSept2025: 10,       // %
+  aiAnyFunctionNov2025: 17.3,       // %
+  informationSector: 27,            // % using AI
+  publishingHighest: 36,            // %
+  dataProcessing: 35,               // %
+  expectedGrowthNext6Months: 4,     // pp
+  note: "Even in Information sector, >60% of firms NOT using AI",
+};
+
+// Brookings/Hamilton Project (Kolko, March 2026) — meta-analysis context
+const BROOKINGS = {
+  keyFinding: "Evidence on AI labor market impact is inconclusive as of March 2026",
+  narratorBias: "Researchers/journalists more exposed to AI than past automation, may color interpretation",
+  historicalComparison: "Occupational mix change 2019-2024 is not unprecedented — less than 1910s, 1940s, 1950s",
+  streetlampBias: "Available data overweights certain conclusions; under-explored: labor supply, transition dynamics",
+};
+
 // Education ordering
 const EDU_ORDER = [
   "No formal educational credential",
