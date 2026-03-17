@@ -950,21 +950,30 @@ function buildAugVsAutomate() {
 // ── 19. Historical Occupational Churn ────────────────────────────────
 
 function buildHistoricalChurn() {
+  const typeColors = {
+    war:        { bg: "rgba(248,113,113,0.55)", border: "#f87171" },
+    growth:     { bg: "rgba(251,191,36,0.45)",  border: "#fbbf24" },
+    stagnation: { bg: "rgba(148,163,184,0.3)",  border: "#94a3b8" },
+    tech:       { bg: "rgba(96,165,250,0.5)",   border: "#60a5fa" },
+    baseline:   { bg: "rgba(148,163,184,0.25)", border: "#64748b" },
+    ai:         { bg: "rgba(167,139,250,0.75)", border: "#a78bfa" },
+  };
+
   const labels = BROOKINGS_CHURN.map(d => d.era);
   const values = BROOKINGS_CHURN.map(d => d.value);
-  const bgs = BROOKINGS_CHURN.map(d => d.highlight ? "rgba(167,139,250,0.7)" : "rgba(148,163,184,0.35)");
-  const borders = BROOKINGS_CHURN.map(d => d.highlight ? "#a78bfa" : "rgba(148,163,184,0.5)");
+  const bgs = BROOKINGS_CHURN.map(d => typeColors[d.type].bg);
+  const borders = BROOKINGS_CHURN.map(d => typeColors[d.type].border);
 
   new Chart(document.getElementById("historicalChurn"), {
     type: "bar",
     data: {
       labels,
       datasets: [{
-        label: "Relative Occupational Mix Change",
+        label: "Occupational Mix Change",
         data: values,
         backgroundColor: bgs,
         borderColor: borders,
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 4,
       }]
     },
@@ -973,11 +982,18 @@ function buildHistoricalChurn() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` Relative churn index: ${ctx.raw}` } }
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const d = BROOKINGS_CHURN[ctx.dataIndex];
+              return [` Churn index: ${ctx.raw}`, ` Driver: ${d.driver}`];
+            }
+          }
+        }
       },
       scales: {
-        x: { min: 0, max: 45, title: { display: true, text: "Relative Magnitude of Occupational Mix Change (illustrative)" } },
-        y: { ticks: { font: { size: 11 } } }
+        x: { min: 0, max: 45, title: { display: true, text: "Rate of Occupational Mix Change (relative index, per Brookings Figure 5)" } },
+        y: { ticks: { font: { size: 12 } } }
       }
     }
   });

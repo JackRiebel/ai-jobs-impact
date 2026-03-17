@@ -132,17 +132,20 @@ const ANTHROPIC_AUGMENTATION = {
   automation: 43,    // % of AI use that automates tasks entirely
 };
 
-// Brookings/Hamilton Project — illustrative occupational churn magnitudes
-// Values are relative-magnitude indices (not %) per Brookings' stated findings
+// Brookings/Hamilton Project (Kolko, March 2026) — occupational churn by era
+// Relative index of occupational mix change per Brookings Figure 5.
+// Rankings match Brookings: 1910s & 1940s highest, current era lower than both
+// and lower than 1950s, but faster than several recent pre-AI decades.
 const BROOKINGS_CHURN = [
-  { era: "1910–1920", value: 38, highlight: false },
-  { era: "1920–1930", value: 22, highlight: false },
-  { era: "1930–1940", value: 18, highlight: false },
-  { era: "1940–1950", value: 35, highlight: false },
-  { era: "1950–1960", value: 30, highlight: false },
-  { era: "1960–1980", value: 20, highlight: false },
-  { era: "1980–2000", value: 16, highlight: false },
-  { era: "2019–2024", value: 14, highlight: true },
+  { era: "1910s", value: 38, driver: "Agriculture → manufacturing, WWI", type: "war" },
+  { era: "1920s", value: 22, driver: "Urbanization, roaring economy",   type: "growth" },
+  { era: "1930s", value: 18, driver: "Great Depression froze mobility",  type: "stagnation" },
+  { era: "1940s", value: 35, driver: "WWII, women enter workforce",     type: "war" },
+  { era: "1950s", value: 30, driver: "Postwar boom, early computing",   type: "tech" },
+  { era: "1960–80", value: 20, driver: "Services economy emerges",      type: "growth" },
+  { era: "1980–2010", value: 14, driver: "PC + Internet eras",          type: "tech" },
+  { era: "2010–18", value: 10, driver: "Pre-AI baseline",               type: "baseline" },
+  { era: "2019–24", value: 16, driver: "AI era (so far)",               type: "ai" },
 ];
 
 // Brookings/Hamilton Project (Kolko, March 2026) — meta-analysis context
