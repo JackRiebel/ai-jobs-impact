@@ -82,8 +82,6 @@ Chart.defaults.font.size = 11;
   setupNav();
 })();
 
-// ── MASTER CHART: Category-level bubbles ───────────────────────────────
-
 // ── TREEMAP (squarified, canvas-rendered) ──────────────────────────────
 
 function buildTreemap(DATA) {
@@ -601,7 +599,7 @@ function buildEduMatrix() {
       outlook: "+38–48% employability", outlookColor: "#34d399",
       examples: "Data scientist using AI for rapid modeling · Lawyer using AI for discovery, focusing on strategy · Financial analyst automating reports, focusing on advisory" },
     { title: "Degree + Not AI-Skilled", tag: "High Risk", tagColor: "#fb923c", tagBg: "rgba(251,146,60,0.12)",
-      body: "Highest exposure, no offset. Bachelor's degree holders face 6.74 avg exposure — the highest of any education level. Anthropic: 17.4% of exposed workers hold grad degrees vs 4.5% of unexposed. Without AI skills, their core digital work is exactly what AI automates. Young workers (22–25) in these roles already see 14% lower hiring rates.",
+      body: "Highest exposure, no offset. Bachelor's degree holders face 6.74 avg exposure — the highest of any education level. Anthropic: 17.4% of exposed workers hold grad degrees vs 4.5% of unexposed. Without AI skills, their core digital work is exactly what AI automates. Brynjolfsson/ADP: young workers (22–25) in high-exposure roles saw 16–20% employment declines. However, EIG found no differential impact on young workers using CPS data — the evidence is contested (see Key Findings).",
       outlook: "-20–28% employability", outlookColor: "#f87171",
       examples: "Junior accountant doing routine audits · Paralegal doing document review · Entry-level analyst running standard reports · Copywriter producing templated content" },
     { title: "No Degree + AI-Skilled", tag: "Rising Opportunity", tagColor: "#60a5fa", tagBg: "rgba(96,165,250,0.12)",
@@ -729,7 +727,7 @@ function buildFindings() {
     { stat: "~10%", color: "#a78bfa", title: "Most Firms Haven't Started",
       body: "Census Bureau BTOS: only ~10% of firms use AI in production as of Sept 2025 (up from 4.6% in early 2024). Even in Information sector, >60% of firms don't use AI. The disruption is still early." },
     { stat: "0.30 vs 0.94", color: "#60a5fa", title: "Counterpoint: EIG Data",
-      body: "Eckhardt & Goldschlag (EIG, 5 AI exposure measures): unemployment rose just 0.30pp for most-exposed workers vs 0.94pp for least-exposed. 95% of firms report zero net AI employment impact. Opposite of displacement narrative." },
+      body: "Eckhardt & Goldschlag (EIG, CPS data, 5 AI measures): unemployment rose just 0.30pp for most-exposed vs 0.94pp for least-exposed. Why does this contradict Brynjolfsson? EIG uses smaller CPS sample and looks at all ages, while Brynjolfsson isolates 22–25 where effects concentrate. Both may be right: AI hits young workers in specific roles, but overall employment remains stable." },
     { stat: "94→36%", color: "#fb923c", title: "The Coverage Gap",
       body: "Anthropic: AI can theoretically handle 94% of Computer & Math tasks, but only 35.8% are done with AI. Yale Budget Lab (7 measures): exposure ≠ usage. Office jobs rank high on exposure but low on actual usage." },
     { stat: "+47%", color: "#fbbf24", title: "Exposed = Well-Paid",
@@ -737,7 +735,7 @@ function buildFindings() {
     { stat: "55.8%", color: "#60a5fa", title: "Copilot Productivity Gain",
       body: "Peng et al.: GitHub Copilot users complete coding tasks 55.8% faster. Brynjolfsson (n=5,172): 15% avg gain, 36% for bottom quintile. Noy & Zhang (n=453): 40% time reduction, +18% quality." },
     { stat: "Inconclusive", color: "#94a3b8", title: "Brookings: Research Is Early",
-      body: "Kolko (Brookings, March 2026): evidence on AI labor market impact is collectively inconclusive. Different exposure measures disagree. Occupational churn since 2022 is 'not atypical' vs PC era (1984) or Internet era (1996). Beware 'narrator bias.'" },
+      body: "Kolko (Hamilton Project/Brookings, March 2026): evidence is collectively inconclusive. Seven AI exposure measures don't fully agree (Yale). Occupational churn since 2022 is 'not atypical' vs PC/Internet eras. Only ~10% of firms use AI in production (Census). Key warning: 'narrator bias' — researchers whose own jobs are AI-exposed may overinterpret early signals." },
   ];
   document.getElementById("findingsGrid").innerHTML = findings.map(f =>
     `<div class="finding-card"><div class="fc-stat" style="color:${f.color}">${f.stat}</div><div class="fc-title">${f.title}</div><div class="fc-body">${f.body}</div></div>`

@@ -119,7 +119,7 @@
 <section class="section" id="ai-skills">
   <div class="container">
     <h2>The AI Skill Advantage</h2>
-    <p class="section-desc">The most important finding across all the research: the critical dividing line isn't "will AI affect your job?" — it's "do you know how to use AI?" PwC's analysis of over 1 billion job postings shows AI-skilled workers earn a 56% wage premium (up from 25% in 2023). Empirical studies consistently show 15–55% productivity gains for AI users. Meanwhile, Anthropic found that theoretical AI capability (94% in tech) far exceeds actual usage (33%) — the workers who close that gap capture enormous value. This section explores the widening chasm between AI-proficient and non-proficient workers.</p>
+    <p class="section-desc">The most important finding across all the research: the critical dividing line isn't "will AI affect your job?" — it's "do you know how to use AI?" PwC's analysis of over 1 billion job postings shows AI-skilled workers earn a 56% wage premium (up from 25% in 2023). Empirical studies consistently show 15–55% productivity gains for AI users. Meanwhile, Anthropic found that theoretical AI capability (94% in tech) far exceeds actual usage (35.8%) — the workers who close that gap capture enormous value. This section explores the widening chasm between AI-proficient and non-proficient workers.</p>
     <div class="chart-row">
       <div class="chart-card wide">
         <h3>Projected Career Trajectory: AI-Skilled vs Not (2024–2034)</h3>
@@ -130,7 +130,7 @@
     <div class="chart-row">
       <div class="chart-card">
         <h3>The Proficiency Gap Widens with Exposure</h3>
-        <p class="chart-desc">This grouped bar chart reveals a crucial pattern: AI proficiency matters more the more exposed your job is. For minimal-exposure jobs (roofers, janitors), knowing AI barely moves the needle — their work isn't digital. But for very high-exposure jobs (programmers, analysts, writers), the gap is massive: AI-skilled workers see up to +48% employability while non-AI-skilled workers face -35% decline. Based on St. Louis Fed data showing personal service workers use AI for just 1.3% of hours, vs Brynjolfsson's finding of 36% productivity gains for AI-using knowledge workers.</p>
+        <p class="chart-desc">This grouped bar chart reveals a crucial pattern: AI proficiency matters more the more exposed your job is. For minimal-exposure jobs (roofers, janitors), knowing AI barely moves the needle — their work isn't digital. But for very high-exposure jobs (programmers, analysts, writers), the gap is massive: AI-skilled workers see up to +48% employability while non-AI-skilled workers face -35% decline. Based on St. Louis Fed data showing personal service workers use AI for just 1.3% of hours, vs Brynjolfsson et al.'s customer support study (n=5,172) showing 36% productivity gains for AI-using knowledge workers in the bottom quintile.</p>
         <canvas id="proficiencyGap"></canvas>
       </div>
       <div class="chart-card">
@@ -204,7 +204,7 @@
     <div class="chart-row">
       <div class="chart-card">
         <h3>The Age Divide: Young vs Older Workers (ADP Data)</h3>
-        <p class="chart-desc">Brynjolfsson, Chandar & Chen analyzed 3.5–5 million workers per month via ADP payroll data — the largest study of its kind. Young workers (22–25) in AI-exposed occupations are being hit hard: software devs down 20%, customer service down 15%. But older workers (30+) in the same jobs are <em>growing</em>. The mechanism: firms aren't laying off — they're freezing entry-level hiring. This controlled for remote work, tech sector effects, interest rates, and pandemic corrections.</p>
+        <p class="chart-desc">Brynjolfsson, Chandar & Chen analyzed 3.5–5 million workers per month via ADP payroll data — the largest study of its kind. Young workers (22–25) in AI-exposed occupations are being hit hard: software devs down 20%, customer service down 15%. But older workers (30+) in the same jobs are <em>growing</em>. The mechanism: firms aren't laying off — they're freezing entry-level hiring. Controlled for remote work, tech sector, interest rates, and pandemic corrections. <strong>Important caveat:</strong> EIG found no differential young worker impact using CPS data, and Iscenko & Millet (2026) found these job posting declines began before ChatGPT launched, suggesting macro factors may play a role. The truth likely involves both AI and economic conditions.</p>
         <canvas id="youngWorkerImpact"></canvas>
       </div>
       <div class="chart-card">
@@ -215,8 +215,28 @@
     </div>
     <div class="key-findings">
       <h3>Key Research Findings</h3>
-      <p class="section-desc" style="margin-bottom:14px;">Each finding below cites a specific study with sample size, methodology, and source. The evidence is mixed — some studies find clear displacement effects, others find none. We present both sides. As Brookings notes (March 2026): "the evidence on how AI is affecting the labor market today is inconclusive."</p>
+      <p class="section-desc" style="margin-bottom:14px;">Each finding below cites a specific study with its sample size, methodology, and source. The evidence is genuinely mixed — some studies find clear displacement effects, others find none. We present both sides with explanation. As the Brookings Institution notes (March 2026): "the evidence on how AI is affecting the labor market today is inconclusive." That doesn't mean nothing is happening — it means we're in the early innings of a transformation whose full shape isn't yet clear.</p>
       <div class="findings-grid" id="findingsGrid"></div>
+    </div>
+
+    <!-- Conclusion -->
+    <div style="margin-top:40px; padding:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px;">
+      <h3 style="font-size:20px; font-weight:700; margin-bottom:12px;">The Bottom Line</h3>
+      <p style="font-size:14px; color:var(--fg); line-height:1.7; margin-bottom:16px;">
+        Across 342 occupations, 143 million US jobs, and research from a dozen major institutions, one pattern emerges clearly: <strong>AI is not replacing all jobs — but it is fundamentally reshaping what qualifications matter.</strong>
+      </p>
+      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
+        <strong style="color:var(--fg);">What the data agrees on:</strong> AI disproportionately targets high-paid knowledge work, not manual labor (Anthropic: exposed workers earn 47% more). Workers who learn to use AI see 15–55% productivity gains (6 peer-reviewed studies). AI-skilled roles command a 56% wage premium (PwC, 1B+ job postings). The gap between what AI <em>can</em> do and what it actually <em>does</em> today is enormous — only 35.8% of theoretically automatable Computer & Math tasks are actually done with AI (Anthropic), and only ~10% of firms use AI in production (Census BTOS).
+      </p>
+      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
+        <strong style="color:var(--fg);">Where the data disagrees:</strong> Brynjolfsson/ADP (3.5–5M workers/month) finds young workers ages 22–25 in AI-exposed roles are already seeing 16–20% employment declines. But EIG (5 measures, CPS data) finds no differential impact — unemployment actually rose <em>less</em> for AI-exposed workers. Yale Budget Lab (7 measures) found "stability, not disruption." The disagreement likely comes from different data sources, age breakdowns, and confounding macro factors. Iscenko & Millet (2026) note the declines in AI-exposed job postings began before ChatGPT, suggesting interest rates and post-pandemic corrections play a role too.
+      </p>
+      <p style="font-size:13px; color:var(--fg2); line-height:1.7; margin-bottom:12px;">
+        <strong style="color:var(--fg);">What this means for you:</strong> The single most consequential variable is not your degree, your industry, or your current job title — it's whether you learn to work <em>with</em> AI. Workers who pair domain expertise with AI proficiency are seeing the largest gains across every study we examined. Workers with the same credentials but no AI skills face the highest risk — especially if their work is digital and pattern-based. Education still matters (it opens doors to higher-value work), but a degree without AI literacy is becoming a depreciating asset in exposed fields.
+      </p>
+      <p style="font-size:14px; color:var(--fg); line-height:1.7; font-weight:500;">
+        The transformation is real, even if its pace is debated. Only ~10% of firms have adopted AI in production, meaning 90% of the disruption is still ahead. The workers, companies, and institutions that take this seriously now — while the evidence is early and the window for adaptation is wide — will be the ones best positioned for what comes next.
+      </p>
     </div>
   </div>
 </section>
@@ -248,7 +268,7 @@
 
       <div class="method-card">
         <h3>Empirical Productivity Studies</h3>
-        <p>The AI-skill advantage projections are grounded in peer-reviewed experiments: <strong>Noy & Zhang (2023)</strong>: 40% time reduction, +18% quality (n=453). <strong>Brynjolfsson et al. (2025)</strong>: 15% avg productivity gain, 36% for bottom quintile (n=5,172). <strong>Peng et al.</strong>: GitHub Copilot 55.8% faster. <strong>Cui et al. (2025)</strong>: 26% more weekly tasks (n=5,000). <strong>St. Louis Fed</strong>: 33% more productive during AI use, 5.4% time savings. Key pattern: AI disproportionately benefits lower-performing workers (skill compression).</p>
+        <p>The AI-skill advantage projections are grounded in peer-reviewed experiments: <strong>Noy & Zhang (2023)</strong>: 40% time reduction, +18% quality (n=453). <strong>Brynjolfsson, Li & Raymond (2023)</strong>: 15% avg productivity gain, 36% for bottom quintile in customer support (n=5,172) — note: this is a different study from the Brynjolfsson/ADP employment paper. <strong>Peng et al.</strong>: GitHub Copilot 55.8% faster. <strong>Cui et al. (2025)</strong>: 26% more weekly tasks (n=5,000). <strong>St. Louis Fed</strong>: 33% more productive during AI use, 5.4% time savings. Key pattern: AI disproportionately benefits lower-performing workers (skill compression). <strong>Caveat per Brookings:</strong> these productivity studies are from early adopters and may not generalize broadly; one study found AI made developers slower, another found over-reliance reduced performance.</p>
         <div class="method-tag">Peer-reviewed field experiments &middot; <a href="https://laweconcenter.org/resources/ai-productivity-and-labor-markets-a-review-of-the-empirical-evidence/" target="_blank">Full review of evidence</a></div>
       </div>
 
@@ -266,8 +286,8 @@
 
       <div class="method-card">
         <h3>Counterpoint: EIG & Yale Budget Lab</h3>
-        <p><strong>Eckhardt & Goldschlag (EIG, 2025)</strong> tested 5 AI exposure measures against CPS employment data and found the <strong>opposite</strong> pattern: unemployment rose 0.30pp for most-exposed vs 0.94pp for least-exposed workers. 95% of firms report zero net impact. <strong>Yale Budget Lab (Gimbel et al. 2026)</strong> compared 7 AI exposure measures and found "stability, not major disruption." Both note that different measures disagree substantially on which occupations are most exposed. <strong>Brookings (Kolko, March 2026)</strong> meta-analysis: "evidence is inconclusive" and warns of "narrator bias" — researchers are more exposed to AI than past automation, which may color interpretation.</p>
-        <div class="method-tag">Multiple counter-studies &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.brookings.edu/articles/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a></div>
+        <p><strong>Eckhardt & Goldschlag (EIG, 2025)</strong> tested 5 AI exposure measures against CPS employment data and found no AI-driven job losses: unemployment rose just 0.30pp for most-exposed vs 0.94pp for least-exposed workers. <strong>Why does this contradict Brynjolfsson/ADP?</strong> Key differences: (1) EIG uses CPS data (smaller sample) while Brynjolfsson uses ADP payroll data (3.5–5M workers/month); (2) EIG looks at all workers, while Brynjolfsson isolates ages 22–25 where effects concentrate; (3) Iscenko & Millet (2026) found AI-exposed job posting declines began in 2022 <em>before</em> ChatGPT, suggesting macro factors (rising interest rates, post-pandemic hiring corrections) may be confounding. <strong>Yale Budget Lab (Gimbel et al. 2026)</strong> compared 7 AI exposure measures and found "stability, not major disruption." <strong>Brookings (Kolko, March 2026)</strong> meta-analysis: "evidence is inconclusive" and warns of "narrator bias" — researchers are more exposed to AI than past automation, which may color interpretation.</p>
+        <div class="method-tag">Multiple counter-studies &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.hamiltonproject.org/publication/post/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a></div>
       </div>
 
       <div class="method-card">
@@ -278,7 +298,7 @@
 
       <div class="method-card">
         <h3>AI Improvement Rate & Limitations</h3>
-        <p>Our projections account for AI's acceleration: Anthropic's coverage gap (94% theoretical vs 33% actual) is closing — usage rose from 36% to 49% of sampled jobs between reports. BLS notes technology impacts "tend to take longer than technologists expect" but AI may break this pattern. We model an S-curve adoption where displacement accelerates mid-decade. <strong>Key limitations:</strong> (1) AI advancement may be faster or slower than modeled; (2) policy/regulation could alter outcomes; (3) new job categories will emerge; (4) individual outcomes vary enormously. Projections are directional, not precise.</p>
+        <p>Our projections account for AI's acceleration: Anthropic's coverage gap (94% theoretical vs 35.8% actual in Computer & Math) is closing — usage rose from 36% to 49% of sampled jobs between reports. BLS notes technology impacts "tend to take longer than technologists expect" but AI may break this pattern. We model an S-curve adoption where displacement accelerates mid-decade. <strong>Key limitations:</strong> (1) AI advancement may be faster or slower than modeled; (2) policy/regulation could alter outcomes; (3) new job categories will emerge; (4) individual outcomes vary enormously. Projections are directional, not precise.</p>
         <div class="method-tag">Accounts for acceleration &middot; Honest about uncertainty</div>
       </div>
     </div>
@@ -288,7 +308,7 @@
 <!-- Footer -->
 <footer>
   <div class="container">
-    <p>Data: <a href="https://www.bls.gov/ooh/" target="_blank">BLS OOH</a> &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Methodology</a> &middot; <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic</a> &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC</a> &middot; <a href="https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/" target="_blank">Brynjolfsson/ADP</a> &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.census.gov/hfp/btos/data" target="_blank">Census BTOS</a> &middot; <a href="https://www.brookings.edu/articles/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a> &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a></p>
+    <p>Data: <a href="https://www.bls.gov/ooh/" target="_blank">BLS OOH</a> &middot; <a href="https://www.bls.gov/opub/mlr/2025/article/incorporating-ai-impacts-in-bls-employment-projections.htm" target="_blank">BLS AI Methodology</a> &middot; <a href="https://www.anthropic.com/research/labor-market-impacts" target="_blank">Anthropic</a> &middot; <a href="https://www.pwc.com/gx/en/news-room/press-releases/2025/ai-linked-to-a-fourfold-increase-in-productivity-growth.html" target="_blank">PwC</a> &middot; <a href="https://digitaleconomy.stanford.edu/publication/canaries-in-the-coal-mine-six-facts-about-the-recent-employment-effects-of-artificial-intelligence/" target="_blank">Brynjolfsson/ADP</a> &middot; <a href="https://eig.org/ai-and-jobs-the-final-word/" target="_blank">EIG</a> &middot; <a href="https://budgetlab.yale.edu/research/labor-market-ai-exposure-what-do-we-know" target="_blank">Yale Budget Lab</a> &middot; <a href="https://www.census.gov/hfp/btos/data" target="_blank">Census BTOS</a> &middot; <a href="https://www.hamiltonproject.org/publication/post/research-on-ai-and-the-labor-market-is-still-in-the-first-inning/" target="_blank">Brookings</a> &middot; <a href="https://github.com/JoshKale/jobs" target="_blank">JoshKale/jobs</a></p>
     <p class="footer-note">342 BLS occupations (2024). AI exposure by Gemini Flash. Skill-impact projections are models grounded in published empirical research. Evidence on AI's labor market impact is still evolving — we present findings from multiple studies including counterpoints. Not financial or career advice.</p>
   </div>
 </footer>
