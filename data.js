@@ -3,12 +3,13 @@
 
 const ANTHROPIC = {
   coverage: {
-    computerMath: { theoretical: 94, actual: 33 },
-    officeAdmin: { theoretical: 90 },
-    management: { theoretical: 91.3 },
-    legal: { theoretical: 89 },
-    archEngineering: { theoretical: 84.8 },
-    artMedia: { theoretical: 83.7 },
+    // Theoretical: Eloundou et al. β metric. Actual: Anthropic Economic Index Jan 2026 (~2M conversations)
+    computerMath: { theoretical: 94, actual: 35.8 },
+    officeAdmin: { theoretical: 90, actual: 34.3 },
+    businessFinance: { theoretical: 88, actual: 28.4 },
+    sales: { theoretical: 62, actual: 26.9 },
+    legal: { theoretical: 89, actual: 20.4 },
+    artMedia: { theoretical: 83.7, actual: 19.2 },
   },
   employment: {
     perTenPointsCoverageIncrease: -0.6, // pp decline per 10pp coverage

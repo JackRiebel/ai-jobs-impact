@@ -507,13 +507,15 @@ function buildInsightCards() {
 // ── 8. Coverage Gap ────────────────────────────────────────────────────
 
 function buildCoverageGap() {
+  // Theoretical: Eloundou et al. β metric (% of tasks AI could theoretically handle)
+  // Observed: Anthropic Economic Index Jan 2026 report (actual Claude usage data, ~2M conversations)
   new Chart(document.getElementById("coverageGap"), {
     type: "bar",
     data: {
-      labels: ["Computer\n& Math", "Management", "Office\n& Admin", "Legal", "Architecture\n& Eng.", "Arts\n& Media"],
+      labels: ["Computer\n& Math", "Office\n& Admin", "Business\n& Finance", "Sales", "Legal", "Arts\n& Media"],
       datasets: [
-        { label: "Theoretical AI Capability (β metric)", data: [94, 91.3, 90, 89, 84.8, 83.7], backgroundColor: "rgba(167,139,250,0.35)", borderColor: "#a78bfa", borderWidth: 1, borderRadius: 4 },
-        { label: "Actual Observed Usage (Claude data)", data: [33, null, null, null, null, null], backgroundColor: "rgba(96,165,250,0.7)", borderColor: "#60a5fa", borderWidth: 1, borderRadius: 4 },
+        { label: "Theoretical AI Capability (β metric)", data: [94, 90, 88, 62, 89, 83.7], backgroundColor: "rgba(167,139,250,0.35)", borderColor: "#a78bfa", borderWidth: 1, borderRadius: 4 },
+        { label: "Actual Observed Usage (Claude data, Jan 2026)", data: [35.8, 34.3, 28.4, 26.9, 20.4, 19.2], backgroundColor: "rgba(96,165,250,0.7)", borderColor: "#60a5fa", borderWidth: 1, borderRadius: 4 },
       ]
     },
     options: {
