@@ -52,17 +52,26 @@
   </div>
 </nav>
 
-<!-- MASTER CHART: The Full Picture -->
+<!-- MASTER CHART: Interactive Treemap -->
 <section class="section" id="master">
   <div class="container">
-    <h2>The Full Picture: One Chart to Understand It All</h2>
-    <p class="section-desc">Each bubble is one of 25 job sectors. X-axis = AI exposure, Y-axis = BLS projected growth. Size = how many people work in that sector. Color = exposure level. The pattern is clear: higher exposure correlates with slower growth — but Computer & IT (top-right) defies the trend because AI creates demand there too. Hover any bubble for details.</p>
-    <div class="chart-card wide" style="padding:24px;">
-      <div class="master-controls">
-        <span class="master-hint">Hover over any bubble for full sector details | Size = employment count</span>
+    <h2>The Full Picture: 143M Jobs at a Glance</h2>
+    <p class="section-desc">Every rectangle is a job. Area = how many people work in it. Color = AI exposure (green = safe, red = highly exposed). Grouped by BLS sector. Hover for full details including pay, growth outlook, education, and AI exposure rationale. This is all 342 occupations covering 143M+ US workers.</p>
+    <div class="treemap-wrapper">
+      <canvas id="treemapCanvas"></canvas>
+      <div id="treemapTooltip" class="treemap-tooltip">
+        <div class="tt-title"></div>
+        <div class="tt-exposure"></div>
+        <div class="tt-stats"></div>
+        <div class="tt-rationale"></div>
       </div>
-      <div style="position:relative;height:520px;"><canvas id="masterChart"></canvas></div>
-      <div class="master-legend" id="masterLegend"></div>
+    </div>
+    <div class="treemap-legend">
+      <span class="tl-label">Low Exposure</span>
+      <canvas id="treemapGradient" width="120" height="10"></canvas>
+      <span class="tl-label">High Exposure</span>
+      <span class="tl-sep">|</span>
+      <span class="tl-label">Area = number of jobs</span>
     </div>
   </div>
 </section>

@@ -37,34 +37,11 @@ Chart.defaults.borderColor = "rgba(255,255,255,0.06)";
 Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif";
 Chart.defaults.font.size = 11;
 
-// ── Aggregate by category ──────────────────────────────────────────────
-
-function aggregateByCategory(DATA) {
-  const cats = {};
-  DATA.forEach(d => {
-    const c = d.category;
-    if (!cats[c]) cats[c] = { jobs: 0, expSum: 0, expCount: 0, outSum: 0, outCount: 0, paySum: 0, payCount: 0 };
-    if (d.jobs) cats[c].jobs += d.jobs;
-    if (d.exposure != null && d.jobs) { cats[c].expSum += d.exposure * d.jobs; cats[c].expCount += d.jobs; }
-    if (d.outlook != null && d.jobs) { cats[c].outSum += d.outlook * d.jobs; cats[c].outCount += d.jobs; }
-    if (d.pay && d.jobs) { cats[c].paySum += d.pay * d.jobs; cats[c].payCount += d.jobs; }
-  });
-  return Object.keys(cats).map(c => ({
-    category: c,
-    name: CAT_NAMES[c] || c,
-    jobs: cats[c].jobs,
-    avgExposure: cats[c].expCount ? cats[c].expSum / cats[c].expCount : 0,
-    avgOutlook: cats[c].outCount ? cats[c].outSum / cats[c].outCount : 0,
-    avgPay: cats[c].payCount ? cats[c].paySum / cats[c].payCount : 0,
-  })).filter(c => c.jobs > 0).sort((a, b) => b.jobs - a.jobs);
-}
-
 // ── Build all charts ───────────────────────────────────────────────────
 
 (function() {
   const DATA = SOURCE_DATA;
-  const CATS = aggregateByCategory(DATA);
-  buildMasterChart(CATS);
+  buildTreemap(DATA);
   buildExposureHistogram(DATA);
   buildTierDoughnut(DATA);
   buildPayExposure(DATA);
@@ -85,105 +62,181 @@ function aggregateByCategory(DATA) {
 
 // ── MASTER CHART: Category-level bubbles ───────────────────────────────
 
-function buildMasterChart(CATS) {
-  const maxJobs = Math.max(...CATS.map(c => c.jobs));
+// ── TREEMAP (squarified, canvas-rendered) ──────────────────────────────
 
-  const chart = new Chart(document.getElementById("masterChart"), {
-    type: "bubble",
-    data: {
-      datasets: [{
-        data: CATS.map(c => ({
-          x: c.avgExposure,
-          y: c.avgOutlook,
-          r: Math.max(6, Math.sqrt(c.jobs / maxJobs) * 42),
-          name: c.name,
-          jobs: c.jobs,
-          avgPay: c.avgPay,
-          avgExposure: c.avgExposure,
-          avgOutlook: c.avgOutlook,
-        })),
-        backgroundColor: CATS.map(c => exposureColor(c.avgExposure, 0.55)),
-        borderColor: CATS.map(c => exposureColor(c.avgExposure, 0.9)),
-        borderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => {
-              const d = ctx.raw;
-              return [
-                d.name,
-                `AI Exposure: ${d.avgExposure.toFixed(1)}/10`,
-                `BLS Growth: ${d.avgOutlook >= 0 ? "+" : ""}${d.avgOutlook.toFixed(1)}%`,
-                `Workers: ${fmt(d.jobs)}`,
-                `Avg Pay: ${fmtPay(Math.round(d.avgPay))}`,
-              ];
-            }
-          },
-          bodyFont: { size: 12 },
-          padding: 12,
-          backgroundColor: "rgba(18,18,26,0.95)",
-          borderColor: "rgba(255,255,255,0.12)",
-          borderWidth: 1,
-        }
-      },
-      scales: {
-        x: {
-          title: { display: true, text: "Average AI Exposure Score (0 = safe, 10 = highly exposed)", font: { size: 12 } },
-          min: 0, max: 10,
-          ticks: { stepSize: 1 },
-          grid: { color: "rgba(255,255,255,0.04)" },
-        },
-        y: {
-          title: { display: true, text: "BLS Projected Growth 2024–2034 (%)", font: { size: 12 } },
-          ticks: { callback: v => (v >= 0 ? "+" : "") + v + "%" },
-          grid: { color: "rgba(255,255,255,0.04)" },
-        }
+function buildTreemap(DATA) {
+  const canvas = document.getElementById("treemapCanvas");
+  const ctx = canvas.getContext("2d");
+  const wrapper = canvas.parentElement;
+  let dpr = window.devicePixelRatio || 1;
+  let rects = [];
+  let hovered = null;
+
+  // Squarified treemap layout algorithm
+  function squarify(items, x, y, w, h) {
+    if (!items.length) return [];
+    if (items.length === 1) return [{ ...items[0], rx: x, ry: y, rw: w, rh: h }];
+    const total = items.reduce((s, d) => s + d.value, 0);
+    if (total === 0) return [];
+    const results = [];
+    let rem = [...items], cx = x, cy = y, cw = w, ch = h;
+    while (rem.length > 0) {
+      const remTotal = rem.reduce((s, d) => s + d.value, 0);
+      const vert = cw >= ch;
+      const side = vert ? ch : cw;
+      let row = [rem[0]], rowSum = rem[0].value;
+      for (let i = 1; i < rem.length; i++) {
+        const cand = [...row, rem[i]], candSum = rowSum + rem[i].value;
+        if (worstAR(cand, candSum, side, remTotal, vert ? cw : ch) < worstAR(row, rowSum, side, remTotal, vert ? cw : ch)) {
+          row = cand; rowSum = candSum;
+        } else break;
       }
-    },
-    plugins: [{
-      // Draw category labels on bubbles
-      id: "bubbleLabels",
-      afterDraw(chart) {
-        const ctx = chart.ctx;
+      const frac = rowSum / remTotal;
+      const thick = vert ? cw * frac : ch * frac;
+      let off = 0;
+      for (const item of row) {
+        const itemFrac = item.value / rowSum;
+        const itemLen = side * itemFrac;
+        if (vert) results.push({ ...item, rx: cx, ry: cy + off, rw: thick, rh: itemLen });
+        else results.push({ ...item, rx: cx + off, ry: cy, rw: itemLen, rh: thick });
+        off += itemLen;
+      }
+      if (vert) { cx += thick; cw -= thick; } else { cy += thick; ch -= thick; }
+      rem = rem.slice(row.length);
+    }
+    return results;
+  }
+  function worstAR(row, rowSum, side, total, extent) {
+    const re = extent * (rowSum / total);
+    if (re === 0) return Infinity;
+    let worst = 0;
+    for (const item of row) {
+      const il = side * (item.value / rowSum);
+      if (il === 0) continue;
+      worst = Math.max(worst, Math.max(re / il, il / re));
+    }
+    return worst;
+  }
+
+  function layout() {
+    const w = wrapper.clientWidth;
+    const h = wrapper.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    const GAP = 1.5, M = 2;
+
+    // Group by category
+    const bycat = {};
+    DATA.forEach(d => {
+      if (!bycat[d.category]) bycat[d.category] = [];
+      bycat[d.category].push(d);
+    });
+    const cats = Object.keys(bycat).map(c => ({
+      cat: c,
+      items: bycat[c].sort((a, b) => (b.jobs || 0) - (a.jobs || 0)),
+      value: bycat[c].reduce((s, d) => s + (d.jobs || 1), 0),
+    })).sort((a, b) => b.value - a.value);
+
+    const catRects = squarify(cats, M, M, w - M * 2, h - M * 2);
+    rects = [];
+    for (const cr of catRects) {
+      const items = cr.items.map(d => ({ ...d, value: d.jobs || 1 }));
+      const inner = squarify(items, cr.rx + GAP, cr.ry + GAP, cr.rw - GAP * 2, cr.rh - GAP * 2);
+      rects.push(...inner);
+    }
+  }
+
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = "#0a0a0f";
+    ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+    const G = 0.75;
+    for (const r of rects) {
+      const isH = r === hovered;
+      const rx = r.rx + G, ry = r.ry + G, rw = r.rw - G * 2, rh = r.rh - G * 2;
+      if (rw <= 0 || rh <= 0) continue;
+      ctx.fillStyle = exposureColor(r.exposure != null ? r.exposure : 5, isH ? 0.85 : 0.55);
+      ctx.fillRect(rx, ry, rw, rh);
+      if (isH) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(rx, ry, rw, rh); }
+      // Labels
+      if (rw > 48 && rh > 16) {
         ctx.save();
-        chart.data.datasets[0].data.forEach((d, i) => {
-          const meta = chart.getDatasetMeta(0).data[i];
-          if (!meta) return;
-          const x = meta.x, y = meta.y, r = d.r;
-          if (r < 12) return; // too small for label
-          ctx.font = `600 ${Math.min(11, Math.max(8, r * 0.38))}px -apple-system, system-ui, sans-serif`;
-          ctx.fillStyle = "rgba(255,255,255,0.9)";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          // Truncate long names
-          let name = d.name;
-          if (name.length > 14 && r < 20) name = name.slice(0, 12) + "…";
-          ctx.fillText(name, x, y - 4);
-          ctx.font = `400 ${Math.max(7, r * 0.28)}px -apple-system, system-ui, sans-serif`;
-          ctx.fillStyle = "rgba(255,255,255,0.6)";
-          ctx.fillText(fmt(d.jobs) + " jobs", x, y + 7);
-        });
+        ctx.beginPath(); ctx.rect(rx + 3, ry + 2, rw - 6, rh - 4); ctx.clip();
+        const fs = Math.min(12, Math.max(8, Math.min(rw / 10, rh / 3)));
+        ctx.font = `500 ${fs}px -apple-system, system-ui, sans-serif`;
+        ctx.fillStyle = isH ? "#fff" : "rgba(255,255,255,0.85)";
+        ctx.textBaseline = "top";
+        ctx.fillText(r.title, rx + 4, ry + 3);
+        if (rh > 30 && rw > 55) {
+          const info = (r.exposure != null ? r.exposure + "/10" : "") + (r.jobs ? " · " + fmt(r.jobs) : "");
+          ctx.font = `400 ${Math.max(7, fs - 2)}px -apple-system, system-ui, sans-serif`;
+          ctx.fillStyle = "rgba(255,255,255,0.5)";
+          ctx.fillText(info, rx + 4, ry + 3 + fs + 2);
+        }
         ctx.restore();
       }
-    }]
+    }
+  }
+
+  function hitTest(mx, my) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = mx - rect.left, cy = my - rect.top;
+    for (let i = rects.length - 1; i >= 0; i--) {
+      const r = rects[i];
+      if (cx >= r.rx && cx < r.rx + r.rw && cy >= r.ry && cy < r.ry + r.rh) return r;
+    }
+    return null;
+  }
+
+  function showTooltip(d, mx, my) {
+    const tt = document.getElementById("treemapTooltip");
+    tt.querySelector(".tt-title").textContent = d.title;
+    if (d.exposure != null) {
+      const color = exposureColor(d.exposure, 1);
+      tt.querySelector(".tt-exposure").innerHTML =
+        `<span style="color:${color};font-weight:600;">AI Exposure: ${d.exposure}/10</span>` +
+        `<div style="margin-top:2px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;"><div style="height:100%;width:${d.exposure*10}%;background:${color};border-radius:2px;"></div></div>`;
+    } else { tt.querySelector(".tt-exposure").innerHTML = ""; }
+    tt.querySelector(".tt-stats").innerHTML = `
+      <span class="label">Median pay</span><span class="value">${fmtPay(d.pay)}</span>
+      <span class="label">Jobs (2024)</span><span class="value">${fmt(d.jobs)}</span>
+      <span class="label">Growth outlook</span><span class="value">${d.outlook != null ? d.outlook + '%' : '—'} ${d.outlook_desc ? '(' + d.outlook_desc + ')' : ''}</span>
+      <span class="label">Education</span><span class="value">${d.education || '—'}</span>
+      <span class="label">Sector</span><span class="value">${CAT_NAMES[d.category] || d.category}</span>`;
+    tt.querySelector(".tt-rationale").textContent = d.exposure_rationale || "";
+    let tx = mx + 14, ty = my - 14;
+    if (tx + 340 > window.innerWidth) tx = mx - 350;
+    if (ty < 10) ty = my + 14;
+    if (ty + 200 > window.innerHeight) ty = my - 200;
+    tt.style.left = tx + "px"; tt.style.top = ty + "px";
+    tt.classList.add("visible");
+  }
+  function hideTooltip() { document.getElementById("treemapTooltip").classList.remove("visible"); }
+
+  canvas.addEventListener("mousemove", e => {
+    const hit = hitTest(e.clientX, e.clientY);
+    if (hit !== hovered) { hovered = hit; draw(); }
+    if (hovered) { showTooltip(hovered, e.clientX, e.clientY); canvas.style.cursor = "pointer"; }
+    else { hideTooltip(); canvas.style.cursor = "default"; }
+  });
+  canvas.addEventListener("mouseleave", () => { hovered = null; hideTooltip(); draw(); });
+  canvas.addEventListener("click", e => {
+    const hit = hitTest(e.clientX, e.clientY);
+    if (hit && hit.url) window.open(hit.url, "_blank");
   });
 
-  // Build legend
-  const el = document.getElementById("masterLegend");
-  el.innerHTML =
-    '<span style="margin-right:8px;">Bubble size = number of workers</span>' +
-    '<span style="margin-right:8px;">|</span>' +
-    '<span style="margin-right:4px;">Color:</span>' +
-    [1,3,5,7,9].map(s =>
-      `<span class="legend-item"><span class="legend-dot" style="background:${exposureColor(s,0.8)}"></span>${s}</span>`
-    ).join("") +
-    '<span style="margin-left:4px;font-size:10px;color:#666;">(exposure)</span>';
+  function resize() { dpr = window.devicePixelRatio || 1; layout(); draw(); }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // Draw gradient legend
+  const gc = document.getElementById("treemapGradient");
+  if (gc) {
+    const gctx = gc.getContext("2d");
+    for (let x = 0; x < 120; x++) { gctx.fillStyle = exposureColor((x / 119) * 10, 1); gctx.fillRect(x, 0, 1, 10); }
+  }
 }
 
 // ── 1. Exposure Histogram ──────────────────────────────────────────────
