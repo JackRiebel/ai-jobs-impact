@@ -79,6 +79,9 @@ Chart.defaults.font.size = 11;
   buildGrowthProjection();
   buildYoungWorkerImpact();
   buildAdoptionRate();
+  buildDemographicsExposure();
+  buildAugVsAutomate();
+  buildHistoricalChurn();
   buildFindings();
   setupNav();
 })();
@@ -799,7 +802,104 @@ function buildAdoptionRate() {
   });
 }
 
-// ── 17. Key Findings ───────────────────────────────────────────────────
+// ── 17. Demographics Exposure ─────────────────────────────────────────
+
+function buildDemographicsExposure() {
+  const labels = ["Women vs Men\n(+16pp exposure)", "White vs Other\n(+11pp exposure)", "Exposed Workers\nEarn 47% More"];
+  const values = [16, 11, 47];
+  const colors = ["rgba(248,113,113,0.65)", "rgba(96,165,250,0.65)", "rgba(52,211,153,0.65)"];
+  const borders = ["#f87171", "#60a5fa", "#34d399"];
+
+  new Chart(document.getElementById("demographicsExposure"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderColor: borders,
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.dataIndex < 2 ? ` +${ctx.raw}pp higher exposure` : ` +${ctx.raw}% earnings gap` } }
+      },
+      scales: {
+        x: { min: 0, max: 55, title: { display: true, text: "Percentage Points / Percent" }, ticks: { callback: v => v + (v <= 20 ? "pp" : "%") } },
+        y: { ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ── 18. Augmentation vs Automation ───────────────────────────────────
+
+function buildAugVsAutomate() {
+  new Chart(document.getElementById("augVsAutomate"), {
+    type: "doughnut",
+    data: {
+      labels: ["Augmentation (57%)", "Automation (43%)"],
+      datasets: [{
+        data: [ANTHROPIC_AUGMENTATION.augmentation, ANTHROPIC_AUGMENTATION.automation],
+        backgroundColor: ["rgba(52,211,153,0.7)", "rgba(249,115,22,0.7)"],
+        borderColor: ["#34d399", "#f97316"],
+        borderWidth: 2,
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: "55%",
+      plugins: {
+        legend: { position: "bottom", labels: { usePointStyle: true, padding: 14, font: { size: 12 } } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}% of AI usage` } }
+      }
+    }
+  });
+}
+
+// ── 19. Historical Occupational Churn ────────────────────────────────
+
+function buildHistoricalChurn() {
+  const labels = BROOKINGS_CHURN.map(d => d.era);
+  const values = BROOKINGS_CHURN.map(d => d.value);
+  const bgs = BROOKINGS_CHURN.map(d => d.highlight ? "rgba(167,139,250,0.7)" : "rgba(148,163,184,0.35)");
+  const borders = BROOKINGS_CHURN.map(d => d.highlight ? "#a78bfa" : "rgba(148,163,184,0.5)");
+
+  new Chart(document.getElementById("historicalChurn"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Relative Occupational Mix Change",
+        data: values,
+        backgroundColor: bgs,
+        borderColor: borders,
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` Relative churn index: ${ctx.raw}` } }
+      },
+      scales: {
+        x: { min: 0, max: 45, title: { display: true, text: "Relative Magnitude of Occupational Mix Change (illustrative)" } },
+        y: { ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ── 20. Key Findings ───────────────────────────────────────────────────
 
 function buildFindings() {
   const findings = [

@@ -103,6 +103,18 @@
     </div>
     <div class="chart-row">
       <div class="chart-card">
+        <h3>Who Faces the Most Exposure?</h3>
+        <p class="chart-desc">AI exposure is not evenly distributed. Anthropic's Economic Index found that women face 16 percentage points higher exposure than men, white workers 11pp more than other groups, and highly exposed workers earn 47% more than unexposed ones. This flips the script on past automation waves — AI targets well-paid, educated, predominantly white-collar knowledge work.</p>
+        <canvas id="demographicsExposure"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Augmentation vs Automation</h3>
+        <p class="chart-desc">Not all AI exposure means job loss. Anthropic's analysis of real Claude usage found that 57% of AI use <em>augments</em> human work (making people faster and better), while 43% <em>automates</em> tasks entirely. This distinction is critical: augmented roles are growing, while automated roles are declining (Brynjolfsson/ADP).</p>
+        <canvas id="augVsAutomate"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card">
         <h3>Most Exposed Occupations</h3>
         <p class="chart-desc">These occupations scored 9–10 on AI exposure — nearly all their work is digital and pattern-based. Medical transcriptionists, data entry keyers, and tax preparers are already seeing AI handle core tasks. BLS has factored this in: medical transcriptionists are projected to decline -4.7% by 2034.</p>
         <div class="job-list" id="topJobsList"></div>
@@ -241,6 +253,13 @@
         <h3>AI Adoption Is Still Early (Census Bureau)</h3>
         <p class="chart-desc">Before assuming AI is disrupting everything, consider this: only ~10% of US firms use AI in production as of Sept 2025 (up from 4.6% in early 2024). Even the Information sector — the most AI-forward — has >60% of firms not using AI at all. The disruption we're seeing is from early adopters. As adoption climbs from 10% toward 50%+, the effects modeled elsewhere on this page will intensify. Data from Census Bureau Business Trends and Outlook Survey (BTOS).</p>
         <canvas id="adoptionRate"></canvas>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>Historical Occupational Churn: Is This Time Different?</h3>
+        <p class="chart-desc">Brookings (Kolko, March 2026) compared the rate of occupational mix change across eight eras. The current AI period (2019–2024, <strong style="color:#a78bfa;">purple</strong>) shows less churn than the 1910s, 1940s, and 1950s — decades of world wars, electrification, and early computing. This doesn't mean AI won't cause major disruption, but it does mean the churn we've seen <em>so far</em> is not historically unprecedented. Values are illustrative relative magnitudes based on Brookings' stated findings.</p>
+        <canvas id="historicalChurn"></canvas>
       </div>
     </div>
     <div class="key-findings">

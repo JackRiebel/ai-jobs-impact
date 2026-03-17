@@ -126,6 +126,25 @@ const CENSUS_BTOS = {
   note: "Even in Information sector, >60% of firms NOT using AI",
 };
 
+// Anthropic: augmentation vs automation split (from Economic Index)
+const ANTHROPIC_AUGMENTATION = {
+  augmentation: 57,  // % of AI use that augments human work
+  automation: 43,    // % of AI use that automates tasks entirely
+};
+
+// Brookings/Hamilton Project — illustrative occupational churn magnitudes
+// Values are relative-magnitude indices (not %) per Brookings' stated findings
+const BROOKINGS_CHURN = [
+  { era: "1910–1920", value: 38, highlight: false },
+  { era: "1920–1930", value: 22, highlight: false },
+  { era: "1930–1940", value: 18, highlight: false },
+  { era: "1940–1950", value: 35, highlight: false },
+  { era: "1950–1960", value: 30, highlight: false },
+  { era: "1960–1980", value: 20, highlight: false },
+  { era: "1980–2000", value: 16, highlight: false },
+  { era: "2019–2024", value: 14, highlight: true },
+];
+
 // Brookings/Hamilton Project (Kolko, March 2026) — meta-analysis context
 const BROOKINGS = {
   keyFinding: "Evidence on AI labor market impact is inconclusive as of March 2026",
