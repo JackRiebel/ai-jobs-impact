@@ -79,6 +79,8 @@ Chart.defaults.font.size = 11;
   buildGrowthProjection();
   buildYoungWorkerImpact();
   buildAdoptionRate();
+  buildProductivityStudies();
+  buildWagePremium();
   buildDemographicsExposure();
   buildAugVsAutomate();
   buildHistoricalChurn();
@@ -802,7 +804,82 @@ function buildAdoptionRate() {
   });
 }
 
-// ── 17. Demographics Exposure ─────────────────────────────────────────
+// ── 17. Productivity Studies ──────────────────────────────────────────
+
+function buildProductivityStudies() {
+  const studies = [
+    { label: "Peng et al.\n(Copilot, devs)", value: 55.8, color: "rgba(96,165,250,0.65)", border: "#60a5fa" },
+    { label: "Noy & Zhang\n(ChatGPT, n=453)", value: 40, color: "rgba(52,211,153,0.65)", border: "#34d399" },
+    { label: "Brynjolfsson\nBottom 20% (n=5172)", value: 36, color: "rgba(167,139,250,0.65)", border: "#a78bfa" },
+    { label: "St. Louis Fed\nDuring AI use", value: 33, color: "rgba(251,191,36,0.65)", border: "#fbbf24" },
+    { label: "Cui et al.\nWeekly tasks (n=5000)", value: 26, color: "rgba(249,115,22,0.65)", border: "#f97316" },
+    { label: "Brynjolfsson\nAvg gain (n=5172)", value: 15, color: "rgba(148,163,184,0.5)", border: "#94a3b8" },
+  ];
+
+  new Chart(document.getElementById("productivityStudies"), {
+    type: "bar",
+    data: {
+      labels: studies.map(s => s.label),
+      datasets: [{
+        data: studies.map(s => s.value),
+        backgroundColor: studies.map(s => s.color),
+        borderColor: studies.map(s => s.border),
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` +${ctx.raw}% productivity gain` } }
+      },
+      scales: {
+        x: { min: 0, max: 65, title: { display: true, text: "% Productivity / Speed Gain" }, ticks: { callback: v => "+" + v + "%" } },
+        y: { ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ── 18. Wage Premium Trajectory ──────────────────────────────────────
+
+function buildWagePremium() {
+  const canvas = document.getElementById("wagePremium");
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+
+  new Chart(canvas, {
+    type: "bar",
+    data: {
+      labels: ["2023", "2025"],
+      datasets: [{
+        label: "AI Wage Premium",
+        data: [25, 56],
+        backgroundColor: ["rgba(148,163,184,0.5)", "rgba(52,211,153,0.7)"],
+        borderColor: ["#94a3b8", "#34d399"],
+        borderWidth: 2,
+        borderRadius: 6,
+        barPercentage: 0.5,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}% wage premium for AI-skilled roles` } }
+      },
+      scales: {
+        x: { title: { display: true, text: "Year (PwC, 1B+ job postings)" } },
+        y: { min: 0, max: 70, title: { display: true, text: "Wage Premium (%)" }, ticks: { callback: v => "+" + v + "%" } }
+      }
+    }
+  });
+}
+
+// ── 19. Demographics Exposure ─────────────────────────────────────────
 
 function buildDemographicsExposure() {
   const labels = ["Women vs Men\n(+16pp exposure)", "White vs Other\n(+11pp exposure)", "Exposed Workers\nEarn 47% More"];
