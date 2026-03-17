@@ -810,7 +810,11 @@ function buildDemographicsExposure() {
   const colors = ["rgba(248,113,113,0.65)", "rgba(96,165,250,0.65)", "rgba(52,211,153,0.65)"];
   const borders = ["#f87171", "#60a5fa", "#34d399"];
 
-  new Chart(document.getElementById("demographicsExposure"), {
+  const canvas = document.getElementById("demographicsExposure");
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+
+  new Chart(canvas, {
     type: "bar",
     data: {
       labels,
@@ -820,18 +824,21 @@ function buildDemographicsExposure() {
         borderColor: borders,
         borderWidth: 1,
         borderRadius: 4,
+        barPercentage: 0.7,
+        categoryPercentage: 0.8,
       }]
     },
     options: {
       indexAxis: "y",
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: ctx => ctx.dataIndex < 2 ? ` +${ctx.raw}pp higher exposure` : ` +${ctx.raw}% earnings gap` } }
       },
       scales: {
         x: { min: 0, max: 55, title: { display: true, text: "Percentage Points / Percent" }, ticks: { callback: v => v + (v <= 20 ? "pp" : "%") } },
-        y: { ticks: { font: { size: 11 } } }
+        y: { ticks: { font: { size: 13 } } }
       }
     }
   });
